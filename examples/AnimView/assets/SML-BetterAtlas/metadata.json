@@ -1,0 +1,9 @@
+{
+"version":"BTA 1.2.0",
+"name":"SmlVFXIntro",
+"backgroundColor":"#999999",
+"width":1920,
+"height":1080,
+"asVersion":3,
+"framerate":29.97
+}
