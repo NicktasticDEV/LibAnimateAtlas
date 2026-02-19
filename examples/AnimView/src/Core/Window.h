@@ -29,6 +29,7 @@ private:
     int m_Width;
     int m_Height;
     std::string m_Title;
+    static bool m_HasInitialized;
 };
 
 } // namespace AnimView

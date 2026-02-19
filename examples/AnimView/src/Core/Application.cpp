@@ -15,10 +15,10 @@ Application::Application() {
 Application::~Application() {}
 
 void Application::Run() {
+    //TODO: Don't make application process depend on if window is open.
     while (!m_Window->ShouldClose() && m_Running) {
         Update();
         Render();
-        
         m_Window->SwapBuffers();
         m_Window->PollEvents();
     }
