@@ -45,6 +45,20 @@ endif()
 
 add_executable(${PROJECT_NAME}
     src/Main.cpp
+    
+    # Core
+    src/Core/Application.cpp
+    src/Core/Window.cpp
+    
+    # Animation
+    src/Animation/AnimationPlayer.cpp
+    
+    # UI
+    src/UI/UILayer.cpp
+    src/UI/Panels/ViewportPanel.cpp
+    src/UI/Panels/TimelinePanel.cpp
+    src/UI/Panels/LibraryPanel.cpp
+    src/UI/Panels/InspectorPanel.cpp
 )
 
 # private include directories for this target

@@ -46,9 +46,7 @@ message(STATUS "========== Configuring AnimateAtlas ==========")
 # ========= AnimateAtlas ==========
 # Source files
 set(AnimateAtlas_SRC
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Core/Parser.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Core/Player.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Renderers/GLRenderer.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp"
 )
 # Header files
 set(AnimateAtlas_INCLUDE
