@@ -7,7 +7,6 @@ namespace AnimView {
 
 // Forward declarations
 class Window;
-class AnimationPlayer;
 
 // Base class for ImGui UIs
 class IPanel {
@@ -26,7 +25,7 @@ protected:
 
 class UILayer {
 public:
-    UILayer(Window* window, AnimationPlayer* player);
+    UILayer(Window* window);
     ~UILayer();
 
     // Delete copy constructor and assignment operator
@@ -43,8 +42,6 @@ public:
         m_Panels.push_back(std::make_shared<T>());
     }
 
-    AnimationPlayer* GetAnimationPlayer() const { return m_AnimationPlayer; }
-
 private:
     void InitializeImGui();
     void ShutdownImGui();
@@ -52,7 +49,6 @@ private:
 
 private:
     Window* m_Window;
-    AnimationPlayer* m_AnimationPlayer;
     std::vector<std::shared_ptr<IPanel>> m_Panels;
     bool m_Initialized = false;
     bool m_DockspaceInitialized = false;

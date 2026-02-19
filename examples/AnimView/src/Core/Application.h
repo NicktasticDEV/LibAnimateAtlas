@@ -7,7 +7,6 @@ namespace AnimView {
 
 // Forward declarations
 class UILayer;
-class AnimationPlayer;
 
 class Application {
 public:
@@ -29,7 +28,6 @@ private:
 private:
     std::unique_ptr<Window> m_Window;
     std::unique_ptr<UILayer> m_UILayer;
-    std::unique_ptr<AnimationPlayer> m_AnimationPlayer;
     
     bool m_Running = true;
 };

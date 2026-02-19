@@ -8,10 +8,8 @@ void LibraryPanel::OnImGuiRender() {
         ImGui::End();
         return;
     }
-    
-    //ImGui::Text("Current Animation: %s", m_CurrentAnimation.c_str());
 
-    // Create empty space for animation thumbnails (TODO: Replace with actual thumbnails)
+    //TODO: Empty space for now. Replace with actual preview of library element later
     ImGui::Dummy(ImVec2(0.0f, 150.0f));
     ImGui::Separator();
     

@@ -1,7 +1,6 @@
 #include "UILayer.h"
 
 #include "../Core/Window.h"
-#include "../Animation/AnimationPlayer.h"
 
 // UI Panels used by app
 #include "Panels/LibraryPanel.h"
@@ -17,7 +16,7 @@
 
 namespace AnimView {
 
-UILayer::UILayer(Window* window, AnimationPlayer* player) : m_Window(window), m_AnimationPlayer(player)
+UILayer::UILayer(Window* window) : m_Window(window)
 {
     InitializeImGui();
     

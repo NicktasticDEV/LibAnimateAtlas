@@ -9,29 +9,24 @@ void TimelinePanel::OnImGuiRender() {
         return;
     }
     
+    // Timeline details
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(25.0f, 10.0f));
+    ImGui::BeginGroup();
+        ImGui::Text("%0.2fFPS", (24.0f));
+        ImGui::SameLine();
+        ImGui::Text("%dF", (m_TimelineScrubber));
+    ImGui::EndGroup();
+    ImGui::PopStyleVar();
+
     // Playback controls
-    if (ImGui::Button("Play")) {
-        // TODO: Connect to AnimationPlayer
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Pause")) {
-        // TODO: Connect to AnimationPlayer
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Stop")) {
-        // TODO: Connect to AnimationPlayer
-    }
+    ImGui::BeginGroup();
+        if (ImGui::Button("Play")) {}
+    ImGui::EndGroup();
     
     ImGui::Separator();
     
     // Timeline scrubber
-    ImGui::Text("Time: %.2fs", m_TimelineScrubber);
-    if (ImGui::SliderFloat("##Timeline", &m_TimelineScrubber, 0.0f, 1.5f, "%.2f")) {
-        // TODO: Update animation time when scrubbing
-    }
-    
-    ImGui::Separator();
-    ImGui::Text("Frame: %d / 30", (int)(m_TimelineScrubber * 30.0f));
+    if (ImGui::SliderInt("##Timeline", &m_TimelineScrubber, 0.0f, 30.0f, "")) {}
 
     ImGui::End();
 }

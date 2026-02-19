@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "../UI/UILayer.h"
-#include "../Animation/AnimationPlayer.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -10,8 +9,7 @@ namespace AnimView {
 Application::Application() {
     // Create window
     m_Window = std::make_unique<Window>(1280, 720, "Animate Atlas Viewer");
-    m_AnimationPlayer = std::make_unique<AnimationPlayer>();
-    m_UILayer = std::make_unique<UILayer>(m_Window.get(), m_AnimationPlayer.get());
+    m_UILayer = std::make_unique<UILayer>(m_Window.get());
 }
 
 Application::~Application() {}
@@ -27,7 +25,7 @@ void Application::Run() {
 }
 
 void Application::Update() {
-    m_AnimationPlayer->Update();
+    
 }
 
 void Application::Render() {

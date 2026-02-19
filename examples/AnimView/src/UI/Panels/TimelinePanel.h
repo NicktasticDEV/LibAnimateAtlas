@@ -12,7 +12,7 @@ public:
     void OnImGuiRender() override;
 
 private:
-    float m_TimelineScrubber = 0.0f;
+    int m_TimelineScrubber = 0.0f;
 };
 
 } // namespace AnimView
