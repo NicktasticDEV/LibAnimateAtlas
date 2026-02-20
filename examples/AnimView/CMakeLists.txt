@@ -49,12 +49,14 @@ add_executable(${PROJECT_NAME}
     # Core
     src/Core/Application.cpp
     src/Core/Window.cpp
+    src/Core/Framebuffer.cpp
     
     # UI
     src/UI/UILayer.cpp
     src/UI/Panels/ViewportPanel.cpp
     src/UI/Panels/TimelinePanel.cpp
     src/UI/Panels/LibraryPanel.cpp
+    src/UI/Panels/PropertiesPanel.cpp
 )
 
 # private include directories for this target

@@ -6,6 +6,7 @@
 #include "Panels/LibraryPanel.h"
 #include "Panels/ViewportPanel.h"
 #include "Panels/TimelinePanel.h"
+#include "Panels/PropertiesPanel.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -24,6 +25,7 @@ UILayer::UILayer(Window* window) : m_Window(window)
     AddPanel<ViewportPanel>();
     AddPanel<TimelinePanel>();
     AddPanel<LibraryPanel>();
+    AddPanel<PropertiesPanel>();
 }
 
 UILayer::~UILayer() {
@@ -98,6 +100,7 @@ void UILayer::SetupDockspace() {
         // Dock windows
         ImGui::DockBuilderDockWindow("Viewport", dock_main_id);     // Center
         ImGui::DockBuilderDockWindow("Library", dock_id_right);     // Right
+        ImGui::DockBuilderDockWindow("Properties", dock_id_right);   // Right (stacked with Library)
         ImGui::DockBuilderDockWindow("Timeline", dock_id_bottom);   // Bottom
         
         ImGui::DockBuilderFinish(dockspace_id);
@@ -120,7 +123,7 @@ void UILayer::SetupDockspace() {
             bool viewport_open = m_Panels[0]->IsOpen();
             bool timeline_open = m_Panels[1]->IsOpen();
             bool library_open = m_Panels[2]->IsOpen();
-            
+            bool properties_open = m_Panels[3]->IsOpen();
             if (ImGui::MenuItem("Viewport", nullptr, &viewport_open)) {
                 m_Panels[0]->SetOpen(viewport_open);
             }
@@ -129,6 +132,9 @@ void UILayer::SetupDockspace() {
             }
             if (ImGui::MenuItem("Library", nullptr, &library_open)) {
                 m_Panels[2]->SetOpen(library_open);
+            }
+            if (ImGui::MenuItem("Properties", nullptr, &properties_open)) {
+                m_Panels[3]->SetOpen(properties_open);
             }
 
             ImGui::EndMenu();

@@ -10,8 +10,8 @@ void LibraryPanel::OnImGuiRender() {
     }
 
     //TODO: Empty space for now. Replace with actual preview of library element later
-    ImGui::Dummy(ImVec2(0.0f, 150.0f));
-    ImGui::Separator();
+    //ImGui::Dummy(ImVec2(0.0f, 150.0f));
+    //ImGui::Separator();
     
     // TODO: List available animations from asset directory
     if (ImGui::Selectable("SMLLOGOANIM (stage)", false)) {
