@@ -2,7 +2,6 @@
 
 #include <string>
 
-// Forward declare GLFW types to avoid including GLFW in header
 struct GLFWwindow;
 
 namespace AnimView {

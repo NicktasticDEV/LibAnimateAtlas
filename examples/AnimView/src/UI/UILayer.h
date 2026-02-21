@@ -5,7 +5,6 @@
 
 namespace AnimView {
 
-// Forward declarations
 class Window;
 
 // Base class for ImGui UIs
@@ -46,6 +45,7 @@ private:
     void InitializeImGui();
     void ShutdownImGui();
     void SetupDockspace();
+    void ApplyCustomTheme();
 
 private:
     Window* m_Window;

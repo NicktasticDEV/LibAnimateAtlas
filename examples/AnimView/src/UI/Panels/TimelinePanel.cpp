@@ -9,10 +9,26 @@ TimelinePanel::TimelinePanel() {
     // Test data
     m_Layers = {
         // Structure: Layer name, list of keyframes (frame number, number of elements, isTween), visible
-        {"Test", {{0, 1, false}, {15, 0, false}, {16, 0, false}, {17, 1, false}, {18, 1, false}, {30, 1, true}, {45, 1, false}}, true},
-        {"Test2", {{0, 1, false}, {5, 1, true}, {10, 1, false}, {20, 1, true}, {30, 1, false}}, true},
-        {"Test3", {{0, 0, false}, {10, 1, false}, {25, 1, false}, {40, 1, false}}, true},
-        {"Test4", {{0, 0, false}, {30, 1, false}}, true}
+        {"Test", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test2", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test3", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test4", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test5", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test6", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test7", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test8", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test9", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test10", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test11", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test12", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test13", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test14", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test15", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test16", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test17", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test18", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test19", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
+        {"Test20", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true}
     };
     
     // Sort keyframes by frame number for each layer
@@ -54,41 +70,58 @@ void TimelinePanel::OnImGuiRender() {
     const float layerNameWidth = m_Appearance.layerNameWidth;
     const float cellWidth      = m_Appearance.cellWidth * m_Zoom;
     const float rowHeight      = m_Appearance.rowHeight;
+    const float rulerHeight    = m_Appearance.rulerHeight;
 
     // Available width for the frame grid (excludes the pinned layer-name column)
     float availableWidth = ImGui::GetContentRegionAvail().x - layerNameWidth;
     if (availableWidth < 1.0f) availableWidth = 1.0f;
     int visibleFrames = std::max(1, (int)(availableWidth / cellWidth));
 
-    // Limit scroll so the user cannot pan past the last keyframe (+small buffer)
-    int maxOffset = std::max(0, lastKeyframe + 500);
-    m_FrameOffset = std::max(0, std::min(m_FrameOffset, maxOffset));
+    // Available height for layers (excludes ruler and child border)
+    float availableHeight = ImGui::GetContentRegionAvail().y - rulerHeight - 8.0f;
+    int visibleLayers = std::max(1, (int)(availableHeight / rowHeight));
 
-    // Auto-scroll (Adobe Animate style): keep the playhead in view when stepping
+    // Clamp frame offset
+    int maxFrameOffset = std::max(0, lastKeyframe + 500);
+    m_FrameOffset = std::max(0, std::min(m_FrameOffset, maxFrameOffset));
+
+    // Clamp layer offset: allow scrolling 5 past the last real layer
+    int maxLayerOffset = std::max(0, (int)m_Layers.size() - 1 + 5);
+    m_LayerOffset = std::max(0, std::min(m_LayerOffset, maxLayerOffset));
+
+    // Auto-scroll frame: keep the playhead in view when stepping
     if (m_CurrentFrame < m_FrameOffset) {
         m_FrameOffset = m_CurrentFrame;
     } else if (m_CurrentFrame >= m_FrameOffset + visibleFrames) {
         m_FrameOffset = m_CurrentFrame - visibleFrames + 1;
-        m_FrameOffset = std::min(m_FrameOffset, maxOffset);
+        m_FrameOffset = std::min(m_FrameOffset, maxFrameOffset);
     }
 
-    // Timeline child — no ImGui scroll bars; we manage panning ourselves
+    // Timeline child — no built-in scroll; we manage both axes ourselves
     ImGui::BeginChild("TimelineContent", ImVec2(0, 0), true,
         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-    // Mouse-wheel panning (vertical wheel scrolls the timeline horizontally)
+    // Mouse-wheel handling
     if (ImGui::IsWindowHovered()) {
-        float wheel = ImGui::GetIO().MouseWheelH;
-        if (wheel == 0.0f) wheel = -ImGui::GetIO().MouseWheel; // fallback to vertical wheel
-        if (wheel != 0.0f) {
+        float wheelH = ImGui::GetIO().MouseWheelH;
+        float wheelV = ImGui::GetIO().MouseWheel;
+        bool shiftHeld = ImGui::GetIO().KeyShift;
+
+        if (wheelH != 0.0f || (shiftHeld && wheelV != 0.0f)) {
+            // Horizontal: pan frames
+            float wheel = (wheelH != 0.0f) ? wheelH : wheelV;
             int delta = (wheel > 0) ? 3 : -3;
-            m_FrameOffset = std::max(0, std::min(m_FrameOffset + delta, maxOffset));
+            m_FrameOffset = std::max(0, std::min(m_FrameOffset + delta, maxFrameOffset));
+        } else if (wheelV != 0.0f) {
+            // Vertical: pan layers
+            int delta = (wheelV > 0) ? -1 : 1;
+            m_LayerOffset = std::max(0, std::min(m_LayerOffset + delta, maxLayerOffset));
         }
     }
 
     DrawFrameRuler(availableWidth, cellWidth);
-    DrawLayers(layerNameWidth, availableWidth, cellWidth, rowHeight);
-    DrawPlayhead(availableWidth, cellWidth);
+    DrawLayers(layerNameWidth, availableWidth, cellWidth, rowHeight, visibleLayers);
+    DrawPlayhead(availableWidth, cellWidth, visibleLayers);
 
     ImGui::EndChild();
 
@@ -164,15 +197,20 @@ void TimelinePanel::DrawFrameRuler(float availableWidth, float cellWidth) {
 }
 
 // Function to draw the layers and keyframes
-void TimelinePanel::DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight) {
+void TimelinePanel::DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight, int visibleLayers) {
 
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 startPos = ImGui::GetCursorScreenPos();
 
     int visibleFrames = std::max(1, (int)(availableWidth / cellWidth)) + 1;
 
-    for (size_t i = 0; i < m_Layers.size(); i++) {
-        ImVec2 rowPos = ImVec2(startPos.x, startPos.y + i * rowHeight);
+    // Only draw the visible slice of layers
+    int layerEnd = std::min(m_LayerOffset + visibleLayers, (int)m_Layers.size());
+    int drawnLayers = std::max(0, layerEnd - m_LayerOffset);
+
+    for (int i = m_LayerOffset; i < layerEnd; i++) {
+        int visualRow = i - m_LayerOffset;
+        ImVec2 rowPos = ImVec2(startPos.x, startPos.y + visualRow * rowHeight);
         const float timelineStartX = rowPos.x + layerNameWidth;
 
         // --- Pinned layer name column (always at the left edge, never scrolls) ---
@@ -221,17 +259,33 @@ void TimelinePanel::DrawLayers(float layerNameWidth, float availableWidth, float
             float startX = timelineStartX + (visStart - m_FrameOffset) * cellWidth;
             float endX   = timelineStartX + (visEnd   - m_FrameOffset) * cellWidth;
             
-            /*ImU32 spanColor = keyframe.isTween
-                ? m_Appearance.colors.tweenKeyframe
-                : m_Appearance.colors.normalKeyframe;
-            */
-            // If numElements is 0, make it a light gray. If it has at least 1 element, use the normal color, if it's tweened, use the tween color
+            // Keyframe span color based on type (empty, normal, tween)
             ImU32 spanColor;
-            if (keyframe.numElements == 0) {
+            /*
+            if (keyframe.numElements == 0) 
+            {
                 spanColor = m_Appearance.colors.emptyKeyFrame;
-            } else if (keyframe.isTween) {
+            } 
+            else if (keyframe.isTween) 
+            {
                 spanColor = m_Appearance.colors.tweenKeyframe;
-            } else {
+            } 
+            else 
+            {
+                spanColor = m_Appearance.colors.normalKeyframe;
+            }
+            */
+
+            if (keyframe.isTween)
+            {
+                spanColor = m_Appearance.colors.tweenKeyframe;
+            } 
+            else if (keyframe.numElements == 0) 
+            {
+                spanColor = m_Appearance.colors.emptyKeyFrame;
+            } 
+            else 
+            {
                 spanColor = m_Appearance.colors.normalKeyframe;
             }
 
@@ -285,11 +339,11 @@ void TimelinePanel::DrawLayers(float layerNameWidth, float availableWidth, float
         }
     }
 
-    // Reserve vertical space so the child window is sized correctly
-    ImGui::Dummy(ImVec2(layerNameWidth + availableWidth, m_Layers.size() * rowHeight));
+    // Reserve vertical space for only the drawn rows
+    ImGui::Dummy(ImVec2(layerNameWidth + availableWidth, drawnLayers * rowHeight));
 }
 
-void TimelinePanel::DrawPlayhead(float availableWidth, float cellWidth) {
+void TimelinePanel::DrawPlayhead(float availableWidth, float cellWidth, int visibleLayers) {
     // Only draw the playhead if it falls within the currently visible frame range
     int visibleFrames = std::max(1, (int)(availableWidth / cellWidth)) + 1;
     if (m_CurrentFrame < m_FrameOffset || m_CurrentFrame >= m_FrameOffset + visibleFrames)
@@ -300,15 +354,18 @@ void TimelinePanel::DrawPlayhead(float availableWidth, float cellWidth) {
     const float rulerHeight    = m_Appearance.rulerHeight;
     const float rowHeight      = m_Appearance.rowHeight;
 
-    // The cursor is currently positioned just after the Dummy in DrawLayers;
-    // move back up to the ruler start.
+    // Number of rows actually drawn (may be less than visibleLayers if near the end)
+    int drawnLayers = std::max(0, std::min(visibleLayers,
+        (int)m_Layers.size() - m_LayerOffset));
+
+    // Back-calculate the ruler start from the Dummy position
     ImVec2 timelineStart = ImGui::GetCursorScreenPos();
-    timelineStart.y -= (m_Layers.size() * rowHeight + rulerHeight);
+    timelineStart.y -= (drawnLayers * rowHeight + rulerHeight);
 
     float playheadX = timelineStart.x + layerNameWidth
                       + (m_CurrentFrame - m_FrameOffset) * cellWidth
                       + cellWidth / 2.0f;
-    float timelineHeight = rulerHeight + m_Layers.size() * rowHeight;
+    float timelineHeight = rulerHeight + drawnLayers * rowHeight;
 
     // Vertical line
     drawList->AddLine(

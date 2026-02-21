@@ -30,8 +30,8 @@ public:
 
 private:
     void DrawFrameRuler(float availableWidth, float cellWidth);
-    void DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight);
-    void DrawPlayhead(float availableWidth, float cellWidth);
+    void DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight, int visibleLayers);
+    void DrawPlayhead(float availableWidth, float cellWidth, int visibleLayers);
     
     // Timeline state
     int m_CurrentFrame = 0;
@@ -39,11 +39,13 @@ private:
     float m_Zoom = 1.0f;
     int m_SelectedLayer = -1;
     int m_FrameOffset = 0;    // first visible frame (Adobe Animate-style panning)
+    int m_LayerOffset = 0;    // first visible layer (Adobe Animate-style panning)
     
     // Dummy data - eventually this will come from your animation system
     std::vector<TimelineLayer> m_Layers;
     
     // Appearance settings
+public:
     struct {
         // Dimensions
         float layerNameWidth = 120.0f;

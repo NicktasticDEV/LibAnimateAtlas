@@ -11,6 +11,7 @@ bool Window::m_HasInitialized = false;
 Window::Window(int width, int height, const std::string& title) : m_Width(width), m_Height(height), m_Title(title)
 {
     // Only do this once if windowing hasn't been init
+    // TODO: Make it so that we can create multiple windows 
     if (!m_HasInitialized) {
         if (!glfwInit()) {
             throw std::runtime_error("Failed to initialize GLFW");
