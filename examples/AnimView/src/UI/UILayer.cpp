@@ -276,7 +276,7 @@ void UILayer::Render() {
     SetupDockspace();
 
     // Render ImGUI demo
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     // Render panels
     for (auto& panel : m_Panels) {
