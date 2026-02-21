@@ -54,7 +54,7 @@ public:
         float rulerHeight = 24.0f;
         
         // Padding
-        float cellPadding = 1.0f;
+        float cellPadding = 0.5f;
         
         // Grid
         bool showGridLines = false;
