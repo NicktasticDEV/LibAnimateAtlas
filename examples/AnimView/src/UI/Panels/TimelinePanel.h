@@ -12,7 +12,7 @@ namespace AnimView {
 struct Keyframe {
     int frame;
     int numElements = 1;
-    bool isTween = false; // If true, shows purple color; if false, light gray
+    bool isTween = false;
 };
 
 struct TimelineLayer {
@@ -29,9 +29,29 @@ public:
     void OnImGuiRender() override;
 
 private:
-    void DrawFrameRuler(float availableWidth, float cellWidth);
-    void DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight, int visibleLayers);
-    void DrawPlayhead(float availableWidth, float cellWidth, int visibleLayers);
+    struct DrawContext {
+        ImDrawList* drawList   = nullptr;
+        float layerNameWidth   = 0.0f;
+        float cellWidth        = 0.0f;
+        float rowHeight        = 0.0f;
+        float availableWidth   = 0.0f;
+        int   visibleFrames    = 0;
+    };
+
+    // Top-level draw stages (called from OnImGuiRender)
+    void DrawFrameRuler(const DrawContext& ctx);
+    void DrawLayers(const DrawContext& ctx, int visibleLayers);
+    void DrawPlayhead(const DrawContext& ctx, int visibleLayers);
+
+    // Per-layer helpers (called from DrawLayers for each visible row)
+    void DrawLayerName(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos);
+    void DrawLayerBackground(const DrawContext& ctx, ImVec2 rowPos);
+    void DrawKeyframeSpans(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos);
+    void DrawGridLines(const DrawContext& ctx, ImVec2 rowPos);
+    void DrawKeyframeMarkers(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos);
+
+    // Utility
+    ImU32 GetKeyframeSpanColor(const Keyframe& kf) const;
     
     // Timeline state
     int m_CurrentFrame = 0;
@@ -44,8 +64,8 @@ private:
     // Dummy data - eventually this will come from your animation system
     std::vector<TimelineLayer> m_Layers;
     
-    // Appearance settings
 public:
+    // Appearance Settings  
     struct {
         // Dimensions
         float layerNameWidth = 120.0f;

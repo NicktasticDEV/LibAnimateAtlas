@@ -6,9 +6,9 @@ namespace AnimView {
 
 TimelinePanel::TimelinePanel() {
 
-    // Test data
+    //Test data for timeline
+    //TODO: Replace with actual texture atlas data
     m_Layers = {
-        // Structure: Layer name, list of keyframes (frame number, number of elements, isTween), visible
         {"Test", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
         {"Test2", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
         {"Test3", {{0, 0, false}, {1, 1, false}, {2, 1, true}, {3, 0, false}, {8, 1, false}, {13, 1, true}, {18, 0, true}, {23, 0, false}}, true},
@@ -44,13 +44,18 @@ void TimelinePanel::OnImGuiRender() {
         return;
     }
 
-    // Compute last keyframe across all layers (dynamic end frame, like Adobe Animate)
+    // Get last keyframe that's in the animation (For knowing what the last keyframe we can scroll to and when the animation ends and shit)
+    //TODO: Probably shouldn't be calculated every frame, make it calculate only when animation changes or something
     int lastKeyframe = 0;
-    for (const auto& layer : m_Layers)
-        for (const auto& kf : layer.keyframes)
+    for (const auto& layer : m_Layers) {
+        for (const auto& kf : layer.keyframes) {
             lastKeyframe = std::max(lastKeyframe, kf.frame);
+        }
+    }
 
+    // -------------------------
     // Playback controls
+    // -------------------------
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 4.0f));
     if (ImGui::Button("<<")) { m_CurrentFrame = 0; }
     ImGui::SameLine();
@@ -67,6 +72,9 @@ void TimelinePanel::OnImGuiRender() {
 
     ImGui::Separator();
 
+    // -------------------------
+    // Variable calc for timeline
+    // -------------------------
     const float layerNameWidth = m_Appearance.layerNameWidth;
     const float cellWidth      = m_Appearance.cellWidth * m_Zoom;
     const float rowHeight      = m_Appearance.rowHeight;
@@ -79,14 +87,14 @@ void TimelinePanel::OnImGuiRender() {
 
     // Available height for layers (excludes ruler and child border)
     float availableHeight = ImGui::GetContentRegionAvail().y - rulerHeight - 8.0f;
-    int visibleLayers = std::max(1, (int)(availableHeight / rowHeight));
+    int visibleLayers = std::max(1, (int)(availableHeight / rowHeight)+1);
 
-    // Clamp frame offset
-    int maxFrameOffset = std::max(0, lastKeyframe + 500);
+    // Horizontal scroll maximum
+    int maxFrameOffset = std::max(0, lastKeyframe + 200);
     m_FrameOffset = std::max(0, std::min(m_FrameOffset, maxFrameOffset));
 
-    // Clamp layer offset: allow scrolling 5 past the last real layer
-    int maxLayerOffset = std::max(0, (int)m_Layers.size() - 1 + 5);
+    // Vertical scroll maximum
+    int maxLayerOffset = std::max(0, (int)m_Layers.size() - 1);
     m_LayerOffset = std::max(0, std::min(m_LayerOffset, maxLayerOffset));
 
     // Auto-scroll frame: keep the playhead in view when stepping
@@ -97,11 +105,14 @@ void TimelinePanel::OnImGuiRender() {
         m_FrameOffset = std::min(m_FrameOffset, maxFrameOffset);
     }
 
-    // Timeline child — no built-in scroll; we manage both axes ourselves
+    // -------------------------
+    // Actual timeline thing
+    // -------------------------
+    // TODO: Add scroll bar
     ImGui::BeginChild("TimelineContent", ImVec2(0, 0), true,
         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-    // Mouse-wheel handling
+    // Mouse-wheel scroll handling
     if (ImGui::IsWindowHovered()) {
         float wheelH = ImGui::GetIO().MouseWheelH;
         float wheelV = ImGui::GetIO().MouseWheel;
@@ -119,73 +130,87 @@ void TimelinePanel::OnImGuiRender() {
         }
     }
 
-    DrawFrameRuler(availableWidth, cellWidth);
-    DrawLayers(layerNameWidth, availableWidth, cellWidth, rowHeight, visibleLayers);
-    DrawPlayhead(availableWidth, cellWidth, visibleLayers);
+    // Build a draw context so every helper shares the same layout values
+    DrawContext ctx;
+    ctx.drawList        = ImGui::GetWindowDrawList();
+    ctx.layerNameWidth  = layerNameWidth;
+    ctx.cellWidth       = cellWidth;
+    ctx.rowHeight       = rowHeight;
+    ctx.availableWidth  = availableWidth;
+    ctx.visibleFrames   = std::max(1, (int)(availableWidth / cellWidth)) + 1;
+
+    DrawFrameRuler(ctx);
+    DrawLayers(ctx, visibleLayers);
+    DrawPlayhead(ctx, visibleLayers);
 
     ImGui::EndChild();
 
     ImGui::End();
 }
 
-// Function to draw the frame ruler at the top of the timeline
-void TimelinePanel::DrawFrameRuler(float availableWidth, float cellWidth) {
+// ===========================================================================
+// Frame ruler draw
+// ===========================================================================
+void TimelinePanel::DrawFrameRuler(const DrawContext& ctx) {
 
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-    const float layerNameWidth = m_Appearance.layerNameWidth;
-    const float rulerHeight    = m_Appearance.rulerHeight;
+    const float rulerHeight = m_Appearance.rulerHeight;
 
-    int visibleFrames = std::max(1, (int)(availableWidth / cellWidth)) + 1;
-
-    // Background — covers the pinned name column + visible timeline width
-    drawList->AddRectFilled(
+    // -------------------------
+    // Tick and frame number drawing
+    // -------------------------
+    // Background draw
+    ctx.drawList->AddRectFilled(
         cursorPos,
-        ImVec2(cursorPos.x + layerNameWidth + availableWidth, cursorPos.y + rulerHeight),
+        ImVec2(cursorPos.x + ctx.layerNameWidth + ctx.availableWidth, cursorPos.y + rulerHeight),
         m_Appearance.colors.rulerBackground
     );
 
-    // Tick marks and frame numbers for visible frames only
-    for (int i = 0; i <= visibleFrames; i++) {
-        int   frame = m_FrameOffset + i;
-        float x     = cursorPos.x + layerNameWidth + i * cellWidth;
+    // Tick marks and frame numbers
+    for (int i = 0; i <= ctx.visibleFrames; i++) {
+        int frame = m_FrameOffset + i;
+        float x = cursorPos.x + ctx.layerNameWidth + i * ctx.cellWidth;
 
-        if (x > cursorPos.x + layerNameWidth + availableWidth) break;
+        if (x > cursorPos.x + ctx.layerNameWidth + ctx.availableWidth) break;
 
-        // Minor tick
-        drawList->AddLine(
-            ImVec2(x + cellWidth / 2, cursorPos.y + rulerHeight - 4),
-            ImVec2(x + cellWidth / 2, cursorPos.y + rulerHeight),
+        // Minor tick draw
+        ctx.drawList->AddLine(
+            ImVec2(x + ctx.cellWidth / 2, cursorPos.y + rulerHeight - 4),
+            ImVec2(x + ctx.cellWidth / 2, cursorPos.y + rulerHeight),
             IM_COL32(100, 100, 100, 255)
         );
 
-        // Major tick + label every 5 frames
+        // Major tick + frame number draw
         if (frame % 5 == 0) {
-            drawList->AddLine(
-                ImVec2(x + cellWidth / 2, cursorPos.y + rulerHeight - 8),
-                ImVec2(x + cellWidth / 2, cursorPos.y + rulerHeight),
+            // Major tick draw
+            ctx.drawList->AddLine(
+                ImVec2(x + ctx.cellWidth / 2, cursorPos.y + rulerHeight - 8),
+                ImVec2(x + ctx.cellWidth / 2, cursorPos.y + rulerHeight),
                 IM_COL32(150, 150, 150, 255)
             );
 
+            // Frame number draw
             char frameNum[8];
             snprintf(frameNum, sizeof(frameNum), "%d", frame);
             ImVec2 textSize = ImGui::CalcTextSize(frameNum);
-            drawList->AddText(
-                ImVec2(x + cellWidth / 2 - textSize.x / 2, cursorPos.y + 2),
+            ctx.drawList->AddText(
+                ImVec2(x + ctx.cellWidth / 2 - textSize.x / 2, cursorPos.y + 2),
                 IM_COL32(200, 200, 200, 255),
                 frameNum
             );
         }
     }
 
-    // Invisible button for ruler scrubbing (skip the pinned name region)
-    ImVec2 rulerTimelinePos = ImVec2(cursorPos.x + layerNameWidth, cursorPos.y);
+    // -------------------------
+    // Scrubbing interaction
+    // -------------------------
+    ImVec2 rulerTimelinePos = ImVec2(cursorPos.x + ctx.layerNameWidth, cursorPos.y);
     ImGui::SetCursorScreenPos(rulerTimelinePos);
-    ImGui::InvisibleButton("##ruler_seek", ImVec2(availableWidth, rulerHeight));
+    ImGui::InvisibleButton("##ruler_seek", ImVec2(ctx.availableWidth, rulerHeight));
 
     if (ImGui::IsItemActive()) {
         float relX = ImGui::GetMousePos().x - rulerTimelinePos.x;
-        int   frame = m_FrameOffset + (int)(relX / cellWidth);
+        int   frame = m_FrameOffset + (int)(relX / ctx.cellWidth);
         m_CurrentFrame = std::max(0, frame);
     }
 
@@ -196,179 +221,171 @@ void TimelinePanel::DrawFrameRuler(float availableWidth, float cellWidth) {
     ImGui::SetCursorScreenPos(ImVec2(cursorPos.x, cursorPos.y + rulerHeight));
 }
 
-// Function to draw the layers and keyframes
-void TimelinePanel::DrawLayers(float layerNameWidth, float availableWidth, float cellWidth, float rowHeight, int visibleLayers) {
+// ===========================================================================
+// Layers draw
+// ===========================================================================
+void TimelinePanel::DrawLayers(const DrawContext& ctx, int visibleLayers) {
 
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 startPos = ImGui::GetCursorScreenPos();
 
-    int visibleFrames = std::max(1, (int)(availableWidth / cellWidth)) + 1;
-
-    // Only draw the visible slice of layers
     int layerEnd = std::min(m_LayerOffset + visibleLayers, (int)m_Layers.size());
     int drawnLayers = std::max(0, layerEnd - m_LayerOffset);
 
     for (int i = m_LayerOffset; i < layerEnd; i++) {
         int visualRow = i - m_LayerOffset;
-        ImVec2 rowPos = ImVec2(startPos.x, startPos.y + visualRow * rowHeight);
-        const float timelineStartX = rowPos.x + layerNameWidth;
+        ImVec2 rowPos = ImVec2(startPos.x, startPos.y + visualRow * ctx.rowHeight);
 
-        // --- Pinned layer name column (always at the left edge, never scrolls) ---
-        drawList->AddRectFilled(
-            rowPos,
-            ImVec2(rowPos.x + layerNameWidth, rowPos.y + rowHeight),
-            m_Appearance.colors.layerBackground
-        );
-        drawList->AddRect(
-            rowPos,
-            ImVec2(rowPos.x + layerNameWidth, rowPos.y + rowHeight),
-            m_Appearance.colors.layerBorder
-        );
-        drawList->AddText(
-            ImVec2(rowPos.x + 5, rowPos.y + 5),
-            IM_COL32(220, 220, 220, 255),
-            m_Layers[i].name.c_str()
-        );
+        const auto& layer = m_Layers[i];
 
-        // --- Visible frame cell area background ---
-        drawList->AddRectFilled(
-            ImVec2(timelineStartX, rowPos.y),
-            ImVec2(timelineStartX + availableWidth, rowPos.y + rowHeight),
-            m_Appearance.colors.timelineBackground
-        );
-
-        const auto& layer      = m_Layers[i];
-        const float cellPadding = m_Appearance.cellPadding;
-
-        // --- Keyframe spans (clipped to visible range) ---
-        for (size_t k = 0; k < layer.keyframes.size(); k++) {
-            const auto& keyframe = layer.keyframes[k];
-            int spanStart = keyframe.frame;
-            int spanEnd   = (k + 1 < layer.keyframes.size())
-                            ? layer.keyframes[k + 1].frame
-                            : spanStart + 1; // last keyframe: single-cell span
-
-            // Skip if completely outside the visible window
-            if (spanEnd <= m_FrameOffset || spanStart >= m_FrameOffset + visibleFrames)
-                continue;
-
-            // Clip span to visible window
-            int visStart = std::max(spanStart, m_FrameOffset);
-            int visEnd   = std::min(spanEnd,   m_FrameOffset + visibleFrames);
-
-            float startX = timelineStartX + (visStart - m_FrameOffset) * cellWidth;
-            float endX   = timelineStartX + (visEnd   - m_FrameOffset) * cellWidth;
-            
-            // Keyframe span color based on type (empty, normal, tween)
-            ImU32 spanColor;
-            /*
-            if (keyframe.numElements == 0) 
-            {
-                spanColor = m_Appearance.colors.emptyKeyFrame;
-            } 
-            else if (keyframe.isTween) 
-            {
-                spanColor = m_Appearance.colors.tweenKeyframe;
-            } 
-            else 
-            {
-                spanColor = m_Appearance.colors.normalKeyframe;
-            }
-            */
-
-            if (keyframe.isTween)
-            {
-                spanColor = m_Appearance.colors.tweenKeyframe;
-            } 
-            else if (keyframe.numElements == 0) 
-            {
-                spanColor = m_Appearance.colors.emptyKeyFrame;
-            } 
-            else 
-            {
-                spanColor = m_Appearance.colors.normalKeyframe;
-            }
-
-            drawList->AddRectFilled(
-                ImVec2(startX + cellPadding, rowPos.y + cellPadding),
-                ImVec2(endX   - cellPadding, rowPos.y + rowHeight - cellPadding),
-                spanColor
-            );
-        }
-
-        // --- Grid lines (visible range only) ---
-        if (m_Appearance.showGridLines) {
-            for (int j = 0; j <= visibleFrames; j++) {
-                int   frame = m_FrameOffset + j;
-                float x     = timelineStartX + j * cellWidth;
-                if (x > timelineStartX + availableWidth) break;
-
-                if (frame % 5 == 0) {
-                    drawList->AddLine(ImVec2(x, rowPos.y), ImVec2(x, rowPos.y + rowHeight),
-                        m_Appearance.colors.gridLine5Frame, m_Appearance.gridLineThickness5Frame);
-                } else {
-                    drawList->AddLine(ImVec2(x, rowPos.y), ImVec2(x, rowPos.y + rowHeight),
-                        m_Appearance.colors.gridLine, m_Appearance.gridLineThickness);
-                }
-            }
-        }
-
-        // --- Keyframe circles (visible range only) ---
-        for (const auto& keyframe : layer.keyframes) {
-            if (keyframe.frame < m_FrameOffset || keyframe.frame >= m_FrameOffset + visibleFrames)
-                continue;
-
-            float x       = timelineStartX + (keyframe.frame - m_FrameOffset) * cellWidth;
-            float circleX = x + cellWidth * 0.5f;
-            float circleY = m_Appearance.keyframeCircleCentered
-                            ? rowPos.y + rowHeight * 0.5f
-                            : rowPos.y + rowHeight - 6.0f;
-
-            drawList->AddCircleFilled(
-                ImVec2(circleX, circleY),
-                m_Appearance.keyframeCircleRadius,
-                 (keyframe.numElements > 0) ? m_Appearance.colors.keyframeCircleFill : IM_COL32(0, 0, 0, 0)
-            );
-            drawList->AddCircle(
-                ImVec2(circleX, circleY),
-                m_Appearance.keyframeCircleRadius,
-                m_Appearance.colors.keyframeCircleOutline,
-                0,
-                m_Appearance.keyframeCircleThickness
-            );
-        }
+        DrawLayerName(ctx, layer, rowPos);
+        DrawLayerBackground(ctx, rowPos);
+        DrawKeyframeSpans(ctx, layer, rowPos);
+        DrawGridLines(ctx, rowPos);
+        DrawKeyframeMarkers(ctx, layer, rowPos);
     }
 
     // Reserve vertical space for only the drawn rows
-    ImGui::Dummy(ImVec2(layerNameWidth + availableWidth, drawnLayers * rowHeight));
+    ImGui::Dummy(ImVec2(ctx.layerNameWidth + ctx.availableWidth, drawnLayers * ctx.rowHeight));
 }
 
-void TimelinePanel::DrawPlayhead(float availableWidth, float cellWidth, int visibleLayers) {
-    // Only draw the playhead if it falls within the currently visible frame range
-    int visibleFrames = std::max(1, (int)(availableWidth / cellWidth)) + 1;
-    if (m_CurrentFrame < m_FrameOffset || m_CurrentFrame >= m_FrameOffset + visibleFrames)
-        return;
+// ===========================================================================
+// Per-layer helpers
+// ===========================================================================
+// Layer name draw
+void TimelinePanel::DrawLayerName(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos) {
+    // Background draw
+    ctx.drawList->AddRectFilled(
+        rowPos,
+        ImVec2(rowPos.x + ctx.layerNameWidth, rowPos.y + ctx.rowHeight),
+        m_Appearance.colors.layerBackground
+    );
+    // Border Draw
+    ctx.drawList->AddRect(
+        rowPos,
+        ImVec2(rowPos.x + ctx.layerNameWidth, rowPos.y + ctx.rowHeight),
+        m_Appearance.colors.layerBorder
+    );
+    // Layer name draw
+    ctx.drawList->AddText(
+        ImVec2(rowPos.x + 5, rowPos.y + 5),
+        IM_COL32(220, 220, 220, 255),
+        layer.name.c_str()
+    );
+}
 
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    const float layerNameWidth = m_Appearance.layerNameWidth;
-    const float rulerHeight    = m_Appearance.rulerHeight;
-    const float rowHeight      = m_Appearance.rowHeight;
+// Background fill for the visible frame-cell area
+void TimelinePanel::DrawLayerBackground(const DrawContext& ctx, ImVec2 rowPos) {
+    const float timelineStartX = rowPos.x + ctx.layerNameWidth;
+    ctx.drawList->AddRectFilled(
+        ImVec2(timelineStartX, rowPos.y),
+        ImVec2(timelineStartX + ctx.availableWidth, rowPos.y + ctx.rowHeight),
+        m_Appearance.colors.timelineBackground
+    );
+}
 
-    // Number of rows actually drawn (may be less than visibleLayers if near the end)
-    int drawnLayers = std::max(0, std::min(visibleLayers,
-        (int)m_Layers.size() - m_LayerOffset));
+// Colored keyframe-span rectangles (clipped to visible range)
+void TimelinePanel::DrawKeyframeSpans(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos) {
+    const float timelineStartX = rowPos.x + ctx.layerNameWidth;
+    const float cellPadding    = m_Appearance.cellPadding;
+
+    for (size_t k = 0; k < layer.keyframes.size(); k++) {
+        const auto& keyframe = layer.keyframes[k];
+        int spanStart = keyframe.frame;
+        int spanEnd = (k + 1 < layer.keyframes.size()) ? layer.keyframes[k + 1].frame : spanStart + 1;
+
+        if (spanEnd <= m_FrameOffset || spanStart >= m_FrameOffset + ctx.visibleFrames) continue;
+
+        int visStart = std::max(spanStart, m_FrameOffset);
+        int visEnd = std::min(spanEnd,   m_FrameOffset + ctx.visibleFrames);
+
+        float startX = timelineStartX + (visStart - m_FrameOffset) * ctx.cellWidth;
+        float endX = timelineStartX + (visEnd   - m_FrameOffset) * ctx.cellWidth;
+
+        ctx.drawList->AddRectFilled(
+            ImVec2(startX + cellPadding, rowPos.y + cellPadding),
+            ImVec2(endX - cellPadding, rowPos.y + ctx.rowHeight - cellPadding),
+            GetKeyframeSpanColor(keyframe)
+        );
+    }
+}
+
+// Vertical grid lines (visible range only)
+void TimelinePanel::DrawGridLines(const DrawContext& ctx, ImVec2 rowPos) {
+    if (!m_Appearance.showGridLines) return;
+
+    const float timelineStartX = rowPos.x + ctx.layerNameWidth;
+
+    for (int j = 0; j <= ctx.visibleFrames; j++) {
+        int frame = m_FrameOffset + j;
+        float x = timelineStartX + j * ctx.cellWidth;
+        if (x > timelineStartX + ctx.availableWidth) break;
+
+        if (frame % 5 == 0) {
+            ctx.drawList->AddLine(
+                ImVec2(x, rowPos.y), ImVec2(x, rowPos.y + ctx.rowHeight),
+                m_Appearance.colors.gridLine5Frame, m_Appearance.gridLineThickness5Frame
+            );
+        } else {
+            ctx.drawList->AddLine(
+                ImVec2(x, rowPos.y), ImVec2(x, rowPos.y + ctx.rowHeight),
+                m_Appearance.colors.gridLine, m_Appearance.gridLineThickness
+            );
+        }
+    }
+}
+
+// Keyframe circle markers (visible range only)
+void TimelinePanel::DrawKeyframeMarkers(const DrawContext& ctx, const TimelineLayer& layer, ImVec2 rowPos) {
+    const float timelineStartX = rowPos.x + ctx.layerNameWidth;
+
+    for (const auto& keyframe : layer.keyframes) {
+        if (keyframe.frame < m_FrameOffset || keyframe.frame >= m_FrameOffset + ctx.visibleFrames) continue;
+
+        float x = timelineStartX + (keyframe.frame - m_FrameOffset) * ctx.cellWidth;
+        float circleX = x + ctx.cellWidth * 0.5f;
+        float circleY = m_Appearance.keyframeCircleCentered ? rowPos.y + ctx.rowHeight * 0.5f : rowPos.y + ctx.rowHeight - 6.0f;
+
+        ctx.drawList->AddCircleFilled(
+            ImVec2(circleX, circleY),
+            m_Appearance.keyframeCircleRadius,
+            (keyframe.numElements > 0) ? m_Appearance.colors.keyframeCircleFill : IM_COL32(0, 0, 0, 0)
+        );
+        ctx.drawList->AddCircle(
+            ImVec2(circleX, circleY),
+            m_Appearance.keyframeCircleRadius,
+            m_Appearance.colors.keyframeCircleOutline,
+            0,
+            m_Appearance.keyframeCircleThickness
+        );
+    }
+}
+
+// Map a keyframe type to its span color
+ImU32 TimelinePanel::GetKeyframeSpanColor(const Keyframe& kf) const {
+    if (kf.isTween)           return m_Appearance.colors.tweenKeyframe;
+    if (kf.numElements == 0)  return m_Appearance.colors.emptyKeyFrame;
+    return m_Appearance.colors.normalKeyframe;
+}
+
+// ===========================================================================
+// Playhead (vertical line + triangle handle)
+// ===========================================================================
+void TimelinePanel::DrawPlayhead(const DrawContext& ctx, int visibleLayers) {
+    if (m_CurrentFrame < m_FrameOffset || m_CurrentFrame >= m_FrameOffset + ctx.visibleFrames) return;
+
+    const float rulerHeight = m_Appearance.rulerHeight;
+
+    int drawnLayers = std::max(0, std::min(visibleLayers, (int)m_Layers.size() - m_LayerOffset));
 
     // Back-calculate the ruler start from the Dummy position
     ImVec2 timelineStart = ImGui::GetCursorScreenPos();
-    timelineStart.y -= (drawnLayers * rowHeight + rulerHeight);
+    timelineStart.y -= (drawnLayers * ctx.rowHeight + rulerHeight);
 
-    float playheadX = timelineStart.x + layerNameWidth
-                      + (m_CurrentFrame - m_FrameOffset) * cellWidth
-                      + cellWidth / 2.0f;
-    float timelineHeight = rulerHeight + drawnLayers * rowHeight;
+    float playheadX = timelineStart.x + ctx.layerNameWidth + (m_CurrentFrame - m_FrameOffset) * ctx.cellWidth + ctx.cellWidth / 2.0f;
+    float timelineHeight = rulerHeight + drawnLayers * ctx.rowHeight;
 
     // Vertical line
-    drawList->AddLine(
+    ctx.drawList->AddLine(
         ImVec2(playheadX, timelineStart.y + 10),
         ImVec2(playheadX, timelineStart.y + timelineHeight),
         m_Appearance.colors.playhead,
@@ -377,7 +394,7 @@ void TimelinePanel::DrawPlayhead(float availableWidth, float cellWidth, int visi
 
     // Triangle handle
     const float ts = m_Appearance.playheadTriangleSize;
-    drawList->AddTriangleFilled(
+    ctx.drawList->AddTriangleFilled(
         ImVec2(playheadX - ts, timelineStart.y + 10),
         ImVec2(playheadX + ts, timelineStart.y + 10),
         ImVec2(playheadX,      timelineStart.y + 15),
