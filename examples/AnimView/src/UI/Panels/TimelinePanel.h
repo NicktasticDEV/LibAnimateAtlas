@@ -64,11 +64,10 @@ private:
     // Dummy data - eventually this will come from your animation system
     std::vector<TimelineLayer> m_Layers;
     
-public:
     // Appearance Settings  
     struct {
         // Dimensions
-        float layerNameWidth = 120.0f;
+        float layerNameWidth = 200.0f;
         float cellWidth = 15.0f;
         float rowHeight = 24.0f;
         float rulerHeight = 24.0f;
@@ -78,8 +77,8 @@ public:
         
         // Grid
         bool showGridLines = false;
-        float gridLineThickness = 1.0f;
-        float gridLineThickness5Frame = 1.0f;
+        float gridLineThickness = 0.5f;
+        float gridLineThickness5Frame = 0.f;
         
         // Keyframe markers
         float keyframeCircleRadius = 2.5f;

@@ -265,9 +265,21 @@ void TimelinePanel::DrawLayerName(const DrawContext& ctx, const TimelineLayer& l
         ImVec2(rowPos.x + ctx.layerNameWidth, rowPos.y + ctx.rowHeight),
         m_Appearance.colors.layerBorder
     );
+    // Layer type icon draw (placeholder) - replace with actual icons
+    ctx.drawList->AddCircleFilled(
+        ImVec2(rowPos.x + 15, rowPos.y + ctx.rowHeight / 2),
+        8.0f,
+        IM_COL32(200, 200, 200, 255)
+    );
+    // Visibility toggle icon draw aligned to right (placeholder) - replace with actual icons and interaction
+    ctx.drawList->AddCircleFilled(
+        ImVec2(rowPos.x + ctx.layerNameWidth - 15, rowPos.y + ctx.rowHeight / 2),
+        8.0f,
+        IM_COL32(200, 200, 200, 255)
+    );
     // Layer name draw
     ctx.drawList->AddText(
-        ImVec2(rowPos.x + 5, rowPos.y + 5),
+        ImVec2(rowPos.x + 30, rowPos.y + 5),
         IM_COL32(220, 220, 220, 255),
         layer.name.c_str()
     );
@@ -300,7 +312,7 @@ void TimelinePanel::DrawKeyframeSpans(const DrawContext& ctx, const TimelineLaye
 
         float startX = timelineStartX + (visStart - m_FrameOffset) * ctx.cellWidth;
         float endX = timelineStartX + (visEnd   - m_FrameOffset) * ctx.cellWidth;
-
+        
         ctx.drawList->AddRectFilled(
             ImVec2(startX + cellPadding, rowPos.y + cellPadding),
             ImVec2(endX - cellPadding, rowPos.y + ctx.rowHeight - cellPadding),
@@ -386,7 +398,7 @@ void TimelinePanel::DrawPlayhead(const DrawContext& ctx, int visibleLayers) {
 
     // Vertical line
     ctx.drawList->AddLine(
-        ImVec2(playheadX, timelineStart.y + 10),
+        ImVec2(playheadX, timelineStart.y + ctx.rowHeight),
         ImVec2(playheadX, timelineStart.y + timelineHeight),
         m_Appearance.colors.playhead,
         m_Appearance.playheadThickness
@@ -395,9 +407,16 @@ void TimelinePanel::DrawPlayhead(const DrawContext& ctx, int visibleLayers) {
     // Triangle handle
     const float ts = m_Appearance.playheadTriangleSize;
     ctx.drawList->AddTriangleFilled(
-        ImVec2(playheadX - ts, timelineStart.y + 10),
-        ImVec2(playheadX + ts, timelineStart.y + 10),
-        ImVec2(playheadX,      timelineStart.y + 15),
+        ImVec2(playheadX - ts, timelineStart.y + ctx.rowHeight/2),
+        ImVec2(playheadX + ts, timelineStart.y + ctx.rowHeight/2),
+        ImVec2(playheadX,      timelineStart.y + ctx.rowHeight),
+        m_Appearance.colors.playhead
+    );
+
+    // Rectangle handle that goes above triangle (to make it easier to grab with mouse)
+    ctx.drawList->AddRectFilled(
+        ImVec2(playheadX - ts, timelineStart.y + ctx.rowHeight/2),
+        ImVec2(playheadX + ts, timelineStart.y - ctx.rowHeight),
         m_Appearance.colors.playhead
     );
 }
