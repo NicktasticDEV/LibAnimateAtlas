@@ -52,9 +52,28 @@ struct AnimationGradientData {
     double alpha;
 };
 
-//TODO: struct FilterData
 struct AnimationFilterData {
-
+    std::string name;
+    double blurX;
+    double blurY;
+    int quality;
+    int brightness;
+    int hue;
+    int contrast;
+    int saturation;
+    float distance;
+    bool knockout;
+    std::string type;
+    float strength;
+    float angle;
+    float alpha;
+    float shadowAlpha;
+    std::string highlightColor;
+    std::string shadowColor;
+    bool inner;
+    bool hideObject;
+    std::string color;
+    std::vector<AnimationGradientData> gradientEntries;
 };
 
 struct AnimationSymbolInstanceData {
@@ -65,8 +84,8 @@ struct AnimationSymbolInstanceData {
     std::string loop;
     std::vector<int> Matrix; //TODO: Replace with AnimationMatrixData
     // Blend
-    // Color
-    // Filter
+    AnimationColorData color;
+    std::vector<AnimationFilterData> filters;
 };
 
 struct AnimationAtlasInstanceData {
@@ -141,7 +160,7 @@ struct AnimationData {
 struct AnimationRootData {
     AnimationData ANIMATION;
     AnimationSymbolDictionaryData SYMBOL_DICTIONARY;
-    // Metadata
+    AnimationMetaData metadata;
 };
 
 //TODO: 
@@ -166,11 +185,6 @@ struct AnimationTextFieldAttributesData {
         URL
     */
 };
-
-/*
-    OTHER KNOWN DATA
-    - ActionScript
-*/
 
 void from_json(const nlohmann::json& j, AnimationMetaData& meta);
 
