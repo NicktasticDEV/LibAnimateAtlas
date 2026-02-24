@@ -8,7 +8,7 @@ namespace AnimateAtlas {
 namespace Internal {
 namespace Parsing {
 
-struct AnimationInstanceTransformationPointData {
+struct AnimationTransformationPointData {
     double x;
     double y;
 };
@@ -29,16 +29,39 @@ struct AnimationMetaData {
     double framerate;
 };
 
+struct AnimationColorData {
+    std::string mode;
+    double redMultiplier;
+    double greenMultiplier;
+    double blueMultiplier;
+    double alphaMultiplier;
 
-//TODO: struct ColorData
-//TODO: struct GradientData
+    double redOffset;
+    double greenOffset;
+    double blueOffset;
+    double alphaOffset;
+
+    std::string tintColor;
+    double tintMultiplier;
+    double brightness;
+};
+
+struct AnimationGradientData {
+    double ratio;
+    std::string color;
+    double alpha;
+};
+
 //TODO: struct FilterData
+struct AnimationFilterData {
+
+};
 
 struct AnimationSymbolInstanceData {
     std::string SYMBOL_name;
     int firstFrame;
     std::string symbolType;
-    AnimationInstanceTransformationPointData transformationPoint;
+    AnimationTransformationPointData transformationPoint;
     std::string loop;
     std::vector<int> Matrix; //TODO: Replace with AnimationMatrixData
     // Blend
@@ -105,7 +128,7 @@ struct AnimationSymbolDictionaryData {
 };
 
 struct AnimationStageInstanceData {
-    AnimationSymbolInstanceData SYMBOL_Instance; //? Should this be vector
+    AnimationSymbolInstanceData SYMBOL_Instance; //? Should this be vector (probably note since it seems like their is ever only one symbol)
 };
 
 struct AnimationData {
