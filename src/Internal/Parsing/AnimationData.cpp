@@ -1,4 +1,4 @@
-#include "MetaData.h"
+#include "AnimationData.h"
 
 #include "../JsonUtils.h"
 #include <nlohmann/json.hpp>
@@ -7,7 +7,7 @@ namespace AnimateAtlas {
 namespace Internal {
 namespace Parsing {
 
-void from_json(const nlohmann::json& j, AnimationAtlasMetaData& meta)
+void from_json(const nlohmann::json& j, AnimationMetaData& meta)
 {
     read_json_key(j, {"version"}, meta.version);
     read_json_key(j, {"name"}, meta.name);
