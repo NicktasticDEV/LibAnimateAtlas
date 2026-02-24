@@ -2,69 +2,65 @@
 
 #include <imgui.h>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace AnimView {
 
-// OpenGL Temporary stuff for testing the FBO display; replace with your actual rendering code
-const char *vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-const char *fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
-"}\n\0";
+// Temporary test shaders; replace with your actual rendering code
+static const char* s_VertexSrc = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+uniform mat4 u_MVP;
+void main()
+{
+    gl_Position = u_MVP * vec4(aPos, 1.0);
+}
+)";
 
-unsigned int vertexShader;
-unsigned int fragmentShader;
-unsigned int shaderProgram;
-unsigned int VBO, VAO;
+static const char* s_FragmentSrc = R"(
+#version 330 core
+out vec4 FragColor;
+void main()
+{
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)";
 
 ViewportPanel::ViewportPanel()
 {
     // Create an initial framebuffer; it will be resized on the first frame
     m_Framebuffer = std::make_unique<Framebuffer>(1, 1);
 
-    // Initialize OpenGL resources for testing the FBO display; replace with your actual rendering code
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    // Compile shader program
+    m_Shader = std::make_unique<Shader>(s_VertexSrc, s_FragmentSrc);
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // Initialize test geometry
+    glGenVertexArrays(1, &m_VAO);
+    glGenBuffers(1, &m_VBO);
+
+    glBindVertexArray(m_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+        -1.00f, -1.00f, 0.0f,
+         1.00f, -1.00f, 0.0f,
+         1.00f,  1.00f, 0.0f,
+        -1.00f, -1.00f, 0.0f,
+         1.00f,  1.00f, 0.0f,
+        -1.00f,  1.00f, 0.0f
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+ViewportPanel::~ViewportPanel()
+{
+    glDeleteBuffers(1, &m_VBO);
+    glDeleteVertexArrays(1, &m_VAO);
 }
 
 void ViewportPanel::OnImGuiRender()
@@ -94,13 +90,20 @@ void ViewportPanel::OnImGuiRender()
         glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // TODO: Draw your animation / OpenGL scene here
-        // Temporary test draw (replace with your actual rendering code)
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
+        // Projection
+        glm::mat4 projection = glm::ortho(0.0f, (float)vpW, -(float)vpH, 0.0f, -1.0f, 1.0f);
+        // View
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+        glm::mat4 mvp = projection * view;
+
+        //* Temporary test draw (replace with your actual rendering code)
+        m_Shader->Bind();
+        m_Shader->SetMat4("u_MVP", mvp);
+        glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
-        glUseProgram(0);
+        m_Shader->Unbind();
 
         m_Framebuffer->Unbind();
         // --------------------------------------

@@ -8,7 +8,7 @@ namespace AnimView {
 
 Application::Application() {
     // Create window
-    m_Window = std::make_unique<Window>(1280, 720, "FinEngine - AnimView");
+    m_Window = std::make_unique<Window>(1280, 720, "AnimView");
     m_UILayer = std::make_unique<UILayer>(m_Window.get());
 }
 

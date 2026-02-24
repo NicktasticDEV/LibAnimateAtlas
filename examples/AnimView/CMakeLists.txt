@@ -50,6 +50,7 @@ add_executable(${PROJECT_NAME}
     src/Core/Application.cpp
     src/Core/Window.cpp
     src/Core/Framebuffer.cpp
+    src/Core/Shader.cpp
     
     # UI
     src/UI/UILayer.cpp
@@ -62,6 +63,7 @@ add_executable(${PROJECT_NAME}
 # private include directories for this target
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/src"
+    "${ANIMATEATLAS_EXTERNAL_DIR}/includes"
 )
 
 # Link against the main library target from the root project

@@ -46,7 +46,9 @@ message(STATUS "========== Configuring AnimateAtlas ==========")
 # ========= AnimateAtlas ==========
 # Source files
 set(AnimateAtlas_SRC
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/SpriteMapData.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/MetaData.cpp"
+
 )
 # Header files
 set(AnimateAtlas_INCLUDE
@@ -68,6 +70,7 @@ target_include_directories(${PROJECT_NAME}
         $<INSTALL_INTERFACE:include>
     PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
+        "${CMAKE_CURRENT_SOURCE_DIR}/external/includes"
 )
 # ====================================================================================
 
