@@ -9,14 +9,12 @@ namespace Internal {
 namespace Parsing {
 
 struct AnimationTransformationPointData {
-    double x;
-    double y;
+    float x;
+    float y;
 };
 
-//TODO:
 struct AnimationMatrixData {
-    //* Different for regular and better versions
-    // Regular has 16 floats and better has 6 floats
+    float a, b, c, d, tx, ty;
 };
 
 struct AnimationMetaData {
@@ -26,36 +24,36 @@ struct AnimationMetaData {
     int width;
     int height;
     int asVersion;
-    double framerate;
+    float framerate;
 };
 
 struct AnimationColorData {
     std::string mode;
-    double redMultiplier;
-    double greenMultiplier;
-    double blueMultiplier;
-    double alphaMultiplier;
+    float redMultiplier;
+    float greenMultiplier;
+    float blueMultiplier;
+    float alphaMultiplier;
 
-    double redOffset;
-    double greenOffset;
-    double blueOffset;
-    double alphaOffset;
+    float redOffset;
+    float greenOffset;
+    float blueOffset;
+    float alphaOffset;
 
     std::string tintColor;
-    double tintMultiplier;
-    double brightness;
+    float tintMultiplier;
+    float brightness;
 };
 
 struct AnimationGradientData {
-    double ratio;
+    float ratio;
     std::string color;
-    double alpha;
+    float alpha;
 };
 
 struct AnimationFilterData {
     std::string name;
-    double blurX;
-    double blurY;
+    float blurX;
+    float blurY;
     int quality;
     int brightness;
     int hue;
@@ -82,7 +80,7 @@ struct AnimationSymbolInstanceData {
     std::string symbolType;
     AnimationTransformationPointData transformationPoint;
     std::string loop;
-    std::vector<int> Matrix; //TODO: Replace with AnimationMatrixData
+    AnimationMatrixData Matrix;
     //* Blend
     AnimationColorData color;
     std::vector<AnimationFilterData> filters;
@@ -90,7 +88,7 @@ struct AnimationSymbolInstanceData {
 
 struct AnimationAtlasInstanceData {
     std::string name;
-    //* AnimationMatrixData
+    AnimationMatrixData Matrix;
 };
 
 struct AnimationTextFieldInstanceData {
@@ -186,6 +184,7 @@ struct AnimationTextFieldAttributesData {
     */
 };
 
+void from_json(const nlohmann::json& j, AnimationMatrixData& matrix);
 void from_json(const nlohmann::json& j, AnimationMetaData& meta);
 
 } // namespace Parsing
