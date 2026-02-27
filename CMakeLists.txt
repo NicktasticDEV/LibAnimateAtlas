@@ -2,32 +2,18 @@ cmake_minimum_required(VERSION 3.25)
 project(AnimateAtlas)
 
 # ====================================================================================
-# Options
+# Library Options
 # ====================================================================================
 option(ANIMATEATLAS_BUILD_EXAMPLES "Build AnimateAtlas example projects" ON)
 
 # ====================================================================================
-# Output directories (keep build/ clean; put artifacts in out/)
+# Settings
 # ====================================================================================
-# Note: This does NOT move CMake-generated files (CMakeCache.txt, build system files).
-# Those always live in your chosen build directory (e.g. via `cmake -B <dir>`).
+# Output directories
 set(ANIMATEATLAS_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/out" CACHE PATH "Output directory for built artifacts")
-
-# Single-config generators (Ninja/Makefiles)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib")
-
-# Multi-config generators (Visual Studio / Ninja Multi-Config)
-if(CMAKE_CONFIGURATION_TYPES)
-    foreach(OUTPUTCONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
-        string(TOUPPER "${OUTPUTCONFIG}" OUTPUTCONFIG_UPPER)
-        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${ANIMATEATLAS_OUTPUT_DIR}/${OUTPUTCONFIG}/bin")
-        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${ANIMATEATLAS_OUTPUT_DIR}/${OUTPUTCONFIG}/lib")
-        set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${ANIMATEATLAS_OUTPUT_DIR}/${OUTPUTCONFIG}/lib")
-        set(CMAKE_PDB_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${ANIMATEATLAS_OUTPUT_DIR}/${OUTPUTCONFIG}/pdb")
-    endforeach()
-endif()
 # ====================================================================================
 
 
@@ -126,16 +112,7 @@ endif()
 
 # ========== Desktop Dependencies ==========
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    find_package(OpenGL REQUIRED)
-    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/glad")
-    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image")
 
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-            OpenGL::GL
-            Glad
-            stb_image
-    )
 endif()
 
 # ====================================================================================
@@ -150,10 +127,6 @@ endif()
 # ========== General Desktop Platform ==========
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     install(TARGETS ${PROJECT_NAME} 
-        # TODO: Find a way so that we don't have to add some libraries here kinda like GLFW
-        Glad
-        stb_image
-
         EXPORT AnimateAtlasTargets
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
@@ -175,13 +148,6 @@ install(EXPORT AnimateAtlasTargets
 # ====================================================================================
 # Examples
 # ====================================================================================
-#[[
-if(ANIMATEATLAS_BUILD_EXAMPLES)
-    message(STATUS "Building AnimateAtlas example projects")
-    add_subdirectory(examples)
-endif()
-]]#
-
 if(ANIMATEATLAS_BUILD_EXAMPLES)
     message(STATUS "Building AnimateAtlas example projects")
     add_subdirectory(examples)

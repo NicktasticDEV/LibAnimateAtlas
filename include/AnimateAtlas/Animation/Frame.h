@@ -3,11 +3,18 @@
 namespace AnimateAtlas {
 namespace Animation {
 
-class Keyframe
+class Frame
 {
 public:
-    Keyframe();
-    ~Keyframe();
+    Frame();
+    ~Frame();
+
+    // Elements
+    // Index
+    // Duration
+    // Name
+    // Sound
+    // Blend
 };
 
 } // namespace Animation

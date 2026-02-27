@@ -8,6 +8,13 @@ class Layer
 public:
     Layer();
     ~Layer();
+
+    // Frames
+    // Framecount
+    // Visible
+    // Name
+    // Layertype
+    // ParentLayer
 };
 
 } // namespace Animation

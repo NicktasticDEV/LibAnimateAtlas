@@ -36,6 +36,12 @@ void from_json(const nlohmann::json& j, SpriteMapAtlas& atlas);
 void from_json(const nlohmann::json& j, SpriteMapMeta& meta);
 void from_json(const nlohmann::json& j, SpriteMapData& data);
 
+void to_json(nlohmann::json& j, const SpriteMapResolution& res);
+void to_json(nlohmann::json& j, const SpriteMapSprite& sprite);
+void to_json(nlohmann::json& j, const SpriteMapAtlas& atlas);
+void to_json(nlohmann::json& j, const SpriteMapMeta& meta);
+void to_json(nlohmann::json& j, const SpriteMapData& data);
+
 } // namespace Parsing
 } // namespace Internal
 } // namespace AnimateAtlas

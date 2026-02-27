@@ -8,6 +8,11 @@ class Timeline
 public:
     Timeline();
     ~Timeline();
+
+    // Layers
+    // Name
+    // Current Frame
+    // Frame Count
 };
 
 } // namespace Animation

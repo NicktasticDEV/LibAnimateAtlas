@@ -1,7 +1,6 @@
 #pragma once
 
 namespace AnimateAtlas {
-namespace Animation {
 namespace Element {
 
 class ElementBase
@@ -12,5 +11,4 @@ public:
 };
 
 } // namespace Element
-} // namespace Animation
 } // namespace AnimateAtlas
