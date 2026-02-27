@@ -83,34 +83,34 @@ struct AnimationSymbolInstanceData {
     AnimationTransformationPointData transformationPoint;
     std::string loop;
     std::vector<int> Matrix; //TODO: Replace with AnimationMatrixData
-    // Blend
+    //* Blend
     AnimationColorData color;
     std::vector<AnimationFilterData> filters;
 };
 
 struct AnimationAtlasInstanceData {
     std::string name;
-    // AnimationMatrixData
+    //* AnimationMatrixData
 };
 
 struct AnimationTextFieldInstanceData {
-    // AnimationMatrixData
-    // Text
-    // Type
-    // Instance name
-    // Orientation
-    // Line Type
-    // AnimationTextFieldAttributesData
-    // Border
-    // Sharpness
-    // Thickness
-    // Max characters
+    //* AnimationMatrixData
+    //* Text
+    //* Type
+    //* Instance name
+    //* Orientation
+    //* Line Type
+    //* AnimationTextFieldAttributesData
+    //* Border
+    //* Sharpness
+    //* Thickness
+    //* Max characters
 };
 
 struct AnimationElementData {
-    //  - SymbolInstanceData
-    //  - AtlasInstanceData
-    //  - TextFieldInstanceData
+    AnimationSymbolInstanceData SYMBOL_Instance;
+    AnimationAtlasInstanceData ATLAS_SPRITE_instance;
+    AnimationTextFieldInstanceData textFIELD_Instance;
 };
 
 //TODO: struct TweenData
@@ -121,15 +121,15 @@ struct AnimationFrameData {
     int duration;
     std::vector<AnimationElementData> elements;
     std::string Layer_name;
-    // Tween
-    // Sound
-    // Blend mode
+    //* Tween
+    //* Sound
+    //* Blend mode
 };
 
 struct AnimationLayerData {
     std::string Layer_name;
-    // Layer type
-    // Clipped by
+    std::string Layer_type;
+    std::string Clipped_by;
     std::vector<AnimationFrameData> Frames;
 };
 
@@ -147,7 +147,7 @@ struct AnimationSymbolDictionaryData {
 };
 
 struct AnimationStageInstanceData {
-    AnimationSymbolInstanceData SYMBOL_Instance; //? Should this be vector (probably note since it seems like their is ever only one symbol)
+    AnimationSymbolInstanceData SYMBOL_Instance; //? Should this be vector (probably not since it seems like their is ever only one symbol)
 };
 
 struct AnimationData {
@@ -166,23 +166,23 @@ struct AnimationRootData {
 //TODO: 
 struct AnimationTextFieldAttributesData {
     /*
-        offset
-        length
-        alias
-        align
-        autoKern
-        bold
-        italic
-        charPosition
-        charSpacing
-        lineSpacing
-        font
-        Size
-        color
-        indent
-        leftMargin
-        rightMargin
-        URL
+        * offset
+        * length
+        * alias
+        * align
+        * autoKern
+        * bold
+        * italic
+        * charPosition
+        * charSpacing
+        * lineSpacing
+        * font
+        * Size
+        * color
+        * indent
+        * leftMargin
+        * rightMargin
+        * URL
     */
 };
 
