@@ -34,13 +34,12 @@ message(STATUS "========== Configuring AnimateAtlas ==========")
 set(AnimateAtlas_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/SpriteMapData.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/AnimationData.cpp"
-
 )
+
 # Header files
 set(AnimateAtlas_INCLUDE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-
 # ====================================================================================
 
 
@@ -110,10 +109,7 @@ endif()
 # Dependencies
 # ====================================================================================
 
-# ========== Desktop Dependencies ==========
-if (CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-
-endif()
+# None so far
 
 # ====================================================================================
 
@@ -132,13 +128,14 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "Linux" O
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
     )
-endif()
 
-install(DIRECTORY include/ DESTINATION include)
-install(EXPORT AnimateAtlasTargets
-    NAMESPACE AnimateAtlas::
-    DESTINATION lib/cmake/AnimateAtlas
-)
+    install(DIRECTORY include/ DESTINATION include)
+    
+    install(EXPORT AnimateAtlasTargets
+        NAMESPACE AnimateAtlas::
+        DESTINATION lib/cmake/AnimateAtlas
+    )
+endif()
 
 # ====================================================================================
 

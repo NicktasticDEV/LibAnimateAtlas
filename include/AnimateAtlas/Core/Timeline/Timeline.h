@@ -1,7 +1,8 @@
 #pragma once
 
 namespace AnimateAtlas {
-namespace Animation {
+namespace Core {
+namespace Timeline {
 
 class Timeline
 {
@@ -15,5 +16,6 @@ public:
     // Frame Count
 };
 
-} // namespace Animation
+} // namespace Timeline
+} // namespace Core
 } // namespace AnimateAtlas

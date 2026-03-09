@@ -91,6 +91,30 @@ struct AnimationAtlasInstanceData {
     AnimationMatrixData Matrix;
 };
 
+//TODO: 
+struct AnimationTextFieldAttributesData {
+    /*
+        * offset
+        * length
+        * alias
+        * align
+        * autoKern
+        * bold
+        * italic
+        * charPosition
+        * charSpacing
+        * lineSpacing
+        * font
+        * Size
+        * color
+        * indent
+        * leftMargin
+        * rightMargin
+        * URL
+    */
+};
+
+//TODO: 
 struct AnimationTextFieldInstanceData {
     //* AnimationMatrixData
     //* Text
@@ -111,7 +135,21 @@ struct AnimationElementData {
     AnimationTextFieldInstanceData textFIELD_Instance;
 };
 
-//TODO: struct TweenData
+struct AnimationCurveData {
+    float x;
+    float y;
+};
+
+struct AnimationTweenData {
+    std::vector<AnimationCurveData> curves;
+    std::string type;
+    std::string rotate;
+    int rotateTimes;
+    bool scale;
+    bool snap;
+    bool sync;
+};
+
 //TODO: struct SoundData
 
 struct AnimationFrameData {
@@ -119,7 +157,7 @@ struct AnimationFrameData {
     int duration;
     std::vector<AnimationElementData> elements;
     std::string Layer_name;
-    //* Tween
+    AnimationTweenData tween;
     //* Sound
     //* Blend mode
 };
@@ -161,31 +199,49 @@ struct AnimationRootData {
     AnimationMetaData metadata;
 };
 
-//TODO: 
-struct AnimationTextFieldAttributesData {
-    /*
-        * offset
-        * length
-        * alias
-        * align
-        * autoKern
-        * bold
-        * italic
-        * charPosition
-        * charSpacing
-        * lineSpacing
-        * font
-        * Size
-        * color
-        * indent
-        * leftMargin
-        * rightMargin
-        * URL
-    */
-};
-
+void from_json(const nlohmann::json& j, AnimationTransformationPointData& point);
 void from_json(const nlohmann::json& j, AnimationMatrixData& matrix);
 void from_json(const nlohmann::json& j, AnimationMetaData& meta);
+void from_json(const nlohmann::json& j, AnimationColorData& color);
+void from_json(const nlohmann::json& j, AnimationGradientData& gradient);
+void from_json(const nlohmann::json& j, AnimationFilterData& filter);
+void from_json(const nlohmann::json& j, AnimationSymbolInstanceData& symbolInstance);
+void from_json(const nlohmann::json& j, AnimationAtlasInstanceData& atlasInstance);
+void from_json(const nlohmann::json& j, AnimationTextFieldAttributesData& textFieldAttributes);
+void from_json(const nlohmann::json& j, AnimationTextFieldInstanceData& textFieldInstance);
+void from_json(const nlohmann::json& j, AnimationElementData& element);
+void from_json(const nlohmann::json& j, AnimationCurveData& curve);
+void from_json(const nlohmann::json& j, AnimationTweenData& tween);
+void from_json(const nlohmann::json& j, AnimationFrameData& frame);
+void from_json(const nlohmann::json& j, AnimationLayerData& layer);
+void from_json(const nlohmann::json& j, AnimationTimelineData& timeline);
+void from_json(const nlohmann::json& j, AnimationSymbolDictionaryEntryData& symbolDictionaryEntry);
+void from_json(const nlohmann::json& j, AnimationSymbolDictionaryData& symbolDictionary);
+void from_json(const nlohmann::json& j, AnimationStageInstanceData& stageInstance);
+void from_json(const nlohmann::json& j, AnimationData& animation);
+void from_json(const nlohmann::json& j, AnimationRootData& root);
+
+void to_json(nlohmann::json& j, const AnimationTransformationPointData& point);
+void to_json(nlohmann::json& j, const AnimationMatrixData& matrix);
+void to_json(nlohmann::json& j, const AnimationMetaData& meta);
+void to_json(nlohmann::json& j, const AnimationColorData& color);
+void to_json(nlohmann::json& j, const AnimationGradientData& gradient);
+void to_json(nlohmann::json& j, const AnimationFilterData& filter);
+void to_json(nlohmann::json& j, const AnimationSymbolInstanceData& symbolInstance);
+void to_json(nlohmann::json& j, const AnimationAtlasInstanceData& atlasInstance);
+void to_json(nlohmann::json& j, const AnimationTextFieldAttributesData& textFieldAttributes);
+void to_json(nlohmann::json& j, const AnimationTextFieldInstanceData& textFieldInstance);
+void to_json(nlohmann::json& j, const AnimationElementData& element);
+void to_json(nlohmann::json& j, const AnimationCurveData& curve);
+void to_json(nlohmann::json& j, const AnimationTweenData& tween);
+void to_json(nlohmann::json& j, const AnimationFrameData& frame);
+void to_json(nlohmann::json& j, const AnimationLayerData& layer);
+void to_json(nlohmann::json& j, const AnimationTimelineData& timeline);
+void to_json(nlohmann::json& j, const AnimationSymbolDictionaryEntryData& symbolDictionaryEntry);
+void to_json(nlohmann::json& j, const AnimationSymbolDictionaryData& symbolDictionary);
+void to_json(nlohmann::json& j, const AnimationStageInstanceData& stageInstance);
+void to_json(nlohmann::json& j, const AnimationData& animation);
+void to_json(nlohmann::json& j, const AnimationRootData& root);
 
 } // namespace Parsing
 } // namespace Internal

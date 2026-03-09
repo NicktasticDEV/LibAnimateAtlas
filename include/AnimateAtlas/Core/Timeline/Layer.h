@@ -1,7 +1,8 @@
 #pragma once
 
 namespace AnimateAtlas {
-namespace Animation {
+namespace Core {
+namespace Timeline {
 
 class Layer
 {
@@ -17,5 +18,6 @@ public:
     // ParentLayer
 };
 
-} // namespace Animation
+} // namespace Timeline
+} // namespace Core
 } // namespace AnimateAtlas
