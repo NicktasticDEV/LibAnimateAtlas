@@ -32,6 +32,8 @@ message(STATUS "========== Configuring AnimateAtlas ==========")
 # ========= AnimateAtlas ==========
 # Source files
 set(AnimateAtlas_SRC
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Core/AnimateData.cpp"
+
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/SpriteMapData.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Internal/Parsing/AnimationData.cpp"
 )

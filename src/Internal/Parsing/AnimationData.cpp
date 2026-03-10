@@ -85,7 +85,31 @@ void from_json(const nlohmann::json& j, AnimationGradientData& gradient)
     read_json_key(j, {"A", "alpha"}, gradient.alpha);
 }
 
-//TODO: AnimationFilterData
+//TODO: Check for errors
+void from_json(const nlohmann::json& j, AnimationFilterData& filter)
+{
+    read_json_key(j, {"N", "name"}, filter.name);
+    read_json_key(j, {"BLX", "blurX"}, filter.blurX);
+    read_json_key(j, {"BLY", "blurY"}, filter.blurY);
+    read_json_key(j, {"Q", "quality"}, filter.quality);
+    read_json_key(j, {"BRT", "brightness"}, filter.brightness);
+    read_json_key(j, {"HUE", "hue"}, filter.hue);
+    read_json_key(j, {"CON", "contrast"}, filter.contrast);
+    read_json_key(j, {"SAT", "saturation"}, filter.saturation);
+    read_json_key(j, {"D", "distance"}, filter.distance);
+    read_json_key(j, {"KO", "knockout"}, filter.knockout);
+    read_json_key(j, {"T", "type"}, filter.type);
+    read_json_key(j, {"STR", "strength"}, filter.strength);
+    read_json_key(j, {"ANG", "angle"}, filter.angle);
+    read_json_key(j, {"A", "alpha"}, filter.alpha);
+    read_json_key(j, {"SA", "shadowAlpha"}, filter.shadowAlpha);
+    read_json_key(j, {"HC", "highlightColor"}, filter.highlightColor);
+    read_json_key(j, {"SC", "shadowColor"}, filter.shadowColor);
+    read_json_key(j, {"IN", "inner"}, filter.inner);
+    read_json_key(j, {"HO", "hideObject"}, filter.hideObject);
+    read_json_key(j, {"C", "color"}, filter.color);
+    read_json_key(j, {"GE", "gradientEntries"}, filter.gradientEntries);
+}
 
 void from_json(const nlohmann::json& j, AnimationSymbolInstanceData& instance)
 {
@@ -106,6 +130,11 @@ void from_json(const nlohmann::json& j, AnimationAtlasInstanceData& instance)
     // MATRIX
 }
 
+void from_json(const nlohmann::json& j, AnimationTextFieldInstanceData& textFieldInstance)
+{
+    // TODO: Implement
+}
+
 void from_json(const nlohmann::json& j, AnimationElementData& element)
 {
     read_json_key(j, {"SI", "SYMBOL_Instance"}, element.SYMBOL_Instance);
@@ -119,7 +148,7 @@ void from_json(const nlohmann::json& j, AnimationCurveData& curve)
     read_json_key(j, {"Y"}, curve.y);
 }
 
-//? Check keys
+//TODO: Check keys for mistakes
 void from_json(const nlohmann::json& j, AnimationTweenData& tween)
 {
     read_json_key(j, {"C", "curves"}, tween.curves);
@@ -140,6 +169,23 @@ void from_json(const nlohmann::json& j, AnimationFrameData& frame)
     read_json_key(j, {"T", "tween"}, frame.tween);
     // SOUND
     // BLEND
+}
+
+//* Couple structs skipped
+
+void from_json(const nlohmann::json& j, AnimationData& animation)
+{
+    read_json_key(j, {"N", "name"}, animation.name);
+    //read_json_key(j, {"SI", "StageInstance"}, animation.StageInstance);
+    read_json_key(j, {"SN", "SYMBOL_name"}, animation.SYMBOL_name);
+    //read_json_key(j, {"TL", "TIMELINE"}, animation.TIMELINE);
+}
+
+void from_json(const nlohmann::json& j, AnimationRootData& root)
+{
+    read_json_key(j, {"ANIMATION"}, root.ANIMATION);
+    //read_json_key(j, {"SYMBOL_DICTIONARY"}, root.SYMBOL_DICTIONARY);
+    read_json_key(j, {"metadata"}, root.metadata);
 }
 
 
