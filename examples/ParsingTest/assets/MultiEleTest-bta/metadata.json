@@ -1,0 +1,9 @@
+{
+"version":"BTA 1.2.0",
+"name":"Balltest",
+"backgroundColor":"#FFFFFF",
+"width":640,
+"height":480,
+"asVersion":3,
+"framerate":30
+}

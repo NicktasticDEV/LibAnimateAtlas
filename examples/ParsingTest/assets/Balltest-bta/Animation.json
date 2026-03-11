@@ -1,0 +1,352 @@
+{
+    "ANIMATION": {
+        "name": "Balltest",
+        "StageInstance": {
+            "SYMBOL_Instance": {
+                "SYMBOL_name": "SymbolScene",
+                "firstFrame": 0,
+                "symbolType": "graphic",
+                "transformationPoint": {
+                    "x": 117.7,
+                    "y": 10.6
+                },
+                "loop": "loop",
+                "Matrix": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    8.3,
+                    12.6
+                ]
+            }
+        },
+        "SYMBOL_name": "SymbolScene",
+        "TIMELINE": {
+            "LAYERS": [
+                {
+                    "Layer_name": "Layer_2",
+                    "Frames": [
+                        {
+                            "tween": {
+                                "curve": [
+                                    {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    {
+                                        "x": 0.546948053896923,
+                                        "y": 0.0615227421149364
+                                    },
+                                    {
+                                        "x": 0.703620839911789,
+                                        "y": 0.20568003873512303
+                                    },
+                                    {
+                                        "x": 1,
+                                        "y": 1
+                                    }
+                                ],
+                                "type": "motion",
+                                "rotate": "auto",
+                                "rotateTimes": 0,
+                                "scale": true,
+                                "snap": true,
+                                "sync": false
+                            },
+                            "index": 0,
+                            "duration": 13,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.2,
+                                            "y": 77.2
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            1,
+                                            0,
+                                            0,
+                                            1,
+                                            217.95,
+                                            144.65
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tween": {
+                                "curve": [
+                                    {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    {
+                                        "x": 0.319532117717508,
+                                        "y": 0.31166649700422805
+                                    },
+                                    {
+                                        "x": 0.651555504935455,
+                                        "y": 0.64448931620306
+                                    },
+                                    {
+                                        "x": 1,
+                                        "y": 1
+                                    }
+                                ],
+                                "type": "motion",
+                                "rotate": "auto",
+                                "rotateTimes": 0,
+                                "scale": true,
+                                "snap": true,
+                                "sync": false
+                            },
+                            "index": 13,
+                            "duration": 1,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.25,
+                                            "y": 77.45
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            0.835,
+                                            0,
+                                            0,
+                                            1.361,
+                                            230.7,
+                                            234.35
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tween": {
+                                "curve": [
+                                    {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    {
+                                        "x": 0.342550466524045,
+                                        "y": 0.34698941601716504
+                                    },
+                                    {
+                                        "x": 0.672408578032856,
+                                        "y": 0.680686416228597
+                                    },
+                                    {
+                                        "x": 1,
+                                        "y": 1
+                                    }
+                                ],
+                                "type": "motion",
+                                "rotate": "auto",
+                                "rotateTimes": 0,
+                                "scale": true,
+                                "snap": true,
+                                "sync": false
+                            },
+                            "index": 14,
+                            "duration": 1,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.3,
+                                            "y": 77.25
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            1.152,
+                                            0,
+                                            0,
+                                            0.892,
+                                            206.3,
+                                            305
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tween": {
+                                "curve": [
+                                    {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    {
+                                        "x": 0.312394200344067,
+                                        "y": 0.38678131434425406
+                                    },
+                                    {
+                                        "x": 0.6186046185816461,
+                                        "y": 0.723719896397584
+                                    },
+                                    {
+                                        "x": 1,
+                                        "y": 1
+                                    }
+                                ],
+                                "type": "motion",
+                                "rotate": "auto",
+                                "rotateTimes": 0,
+                                "scale": true,
+                                "snap": true,
+                                "sync": false
+                            },
+                            "index": 15,
+                            "duration": 3,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.35,
+                                            "y": 77.25
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            0.979,
+                                            0,
+                                            0,
+                                            1.038,
+                                            219.5,
+                                            272.65
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tween": {
+                                "curve": [
+                                    {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    {
+                                        "x": 0.20193236945276102,
+                                        "y": 0.6354167979537021
+                                    },
+                                    {
+                                        "x": 0.48114408617821103,
+                                        "y": 1
+                                    },
+                                    {
+                                        "x": 1,
+                                        "y": 1
+                                    }
+                                ],
+                                "type": "motion",
+                                "rotate": "auto",
+                                "rotateTimes": 0,
+                                "scale": true,
+                                "snap": true,
+                                "sync": false
+                            },
+                            "index": 18,
+                            "duration": 11,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.2,
+                                            "y": 77.2
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            1,
+                                            0,
+                                            0,
+                                            1,
+                                            217.95,
+                                            225.6
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "index": 29,
+                            "duration": 1,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "BallGraphic",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 77.2,
+                                            "y": 77.2
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            1,
+                                            0,
+                                            0,
+                                            1,
+                                            217.95,
+                                            184.7
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Layer_name": "Text",
+                    "Frames": [
+                        {
+                            "index": 0,
+                            "duration": 30,
+                            "elements": [
+                                {
+                                    "SYMBOL_Instance": {
+                                        "SYMBOL_name": "TextureAtlasTestText",
+                                        "firstFrame": 0,
+                                        "symbolType": "graphic",
+                                        "transformationPoint": {
+                                            "x": 117.7,
+                                            "y": 10.6
+                                        },
+                                        "loop": "loop",
+                                        "Matrix": [
+                                            1,
+                                            0,
+                                            0,
+                                            1,
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
@@ -130,9 +131,9 @@ struct AnimationTextFieldInstanceData {
 };
 
 struct AnimationElementData {
-    AnimationSymbolInstanceData SYMBOL_Instance;
-    AnimationAtlasInstanceData ATLAS_SPRITE_instance;
-    AnimationTextFieldInstanceData textFIELD_Instance;
+    std::optional<AnimationSymbolInstanceData> SYMBOL_Instance;
+    std::optional<AnimationAtlasInstanceData> ATLAS_SPRITE_instance;
+    std::optional<AnimationTextFieldInstanceData> textFIELD_Instance;
 };
 
 struct AnimationCurveData {
@@ -156,16 +157,16 @@ struct AnimationFrameData {
     int index;
     int duration;
     std::vector<AnimationElementData> elements;
-    std::string Layer_name;
-    AnimationTweenData tween;
+    std::optional<std::string> name;
+    std::optional<AnimationTweenData> tween;
     //* Sound
     //* Blend mode
 };
 
 struct AnimationLayerData {
     std::string Layer_name;
-    std::string Layer_type;
-    std::string Clipped_by;
+    std::optional<std::string> Layer_type;
+    std::optional<std::string> Clipped_by;
     std::vector<AnimationFrameData> Frames;
 };
 
@@ -195,8 +196,8 @@ struct AnimationData {
 
 struct AnimationRootData {
     AnimationData ANIMATION;
-    AnimationSymbolDictionaryData SYMBOL_DICTIONARY;
-    AnimationMetaData metadata;
+    std::optional<AnimationSymbolDictionaryData> SYMBOL_DICTIONARY;
+    std::optional<AnimationMetaData> metadata;
 };
 
 void from_json(const nlohmann::json& j, AnimationTransformationPointData& point);

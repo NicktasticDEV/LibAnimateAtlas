@@ -118,7 +118,7 @@ void from_json(const nlohmann::json& j, AnimationSymbolInstanceData& instance)
     read_json_key(j, {"ST", "symbolType"}, instance.symbolType);
     read_json_key(j, {"TRP", "transformationPoint"}, instance.transformationPoint);
     read_json_key(j, {"LP", "loop"}, instance.loop);
-    // MATRIX
+    from_json(j, instance.Matrix);
     // BLEND
     read_json_key(j, {"C", "color"}, instance.color);
     read_json_key(j, {"F", "filters"}, instance.filters);
@@ -127,8 +127,10 @@ void from_json(const nlohmann::json& j, AnimationSymbolInstanceData& instance)
 void from_json(const nlohmann::json& j, AnimationAtlasInstanceData& instance)
 {
     read_json_key(j, {"N", "name"}, instance.name);
-    // MATRIX
+    from_json(j, instance.Matrix);
 }
+
+// AnimationTextFieldAttributesData
 
 void from_json(const nlohmann::json& j, AnimationTextFieldInstanceData& textFieldInstance)
 {
@@ -137,21 +139,27 @@ void from_json(const nlohmann::json& j, AnimationTextFieldInstanceData& textFiel
 
 void from_json(const nlohmann::json& j, AnimationElementData& element)
 {
-    read_json_key(j, {"SI", "SYMBOL_Instance"}, element.SYMBOL_Instance);
-    read_json_key(j, {"ASI", "ATLAS_SPRITE_instance"}, element.ATLAS_SPRITE_instance);
-    read_json_key(j, {"TFI", "textFIELD_Instance"}, element.textFIELD_Instance);
+    for (const char* key : {"SI", "SYMBOL_Instance"}) {
+        if (j.contains(key)) { element.SYMBOL_Instance = j.at(key).get<AnimationSymbolInstanceData>(); break; }
+    }
+    for (const char* key : {"ASI", "ATLAS_SPRITE_instance"}) {
+        if (j.contains(key)) { element.ATLAS_SPRITE_instance = j.at(key).get<AnimationAtlasInstanceData>(); break; }
+    }
+    for (const char* key : {"TFI", "textFIELD_Instance"}) {
+        if (j.contains(key)) { element.textFIELD_Instance = j.at(key).get<AnimationTextFieldInstanceData>(); break; }
+    }
 }
 
 void from_json(const nlohmann::json& j, AnimationCurveData& curve)
 {
-    read_json_key(j, {"X"}, curve.x);
-    read_json_key(j, {"Y"}, curve.y);
+    read_json_key(j, {"x"}, curve.x);
+    read_json_key(j, {"y"}, curve.y);
 }
 
 //TODO: Check keys for mistakes
 void from_json(const nlohmann::json& j, AnimationTweenData& tween)
 {
-    read_json_key(j, {"C", "curves"}, tween.curves);
+    read_json_key(j, {"C", "curve"}, tween.curves); //TODO: Not working right
     read_json_key(j, {"T", "type"}, tween.type);
     read_json_key(j, {"R", "rotate"}, tween.rotate);
     read_json_key(j, {"RT", "rotateTimes"}, tween.rotateTimes);
@@ -160,25 +168,46 @@ void from_json(const nlohmann::json& j, AnimationTweenData& tween)
     read_json_key(j, {"SY", "sync"}, tween.sync);
 }
 
+// AnimationSoundData
+
 void from_json(const nlohmann::json& j, AnimationFrameData& frame)
 {
     read_json_key(j, {"I", "index"}, frame.index);
     read_json_key(j, {"DU", "duration"}, frame.duration);
     read_json_key(j, {"E", "elements"}, frame.elements);
-    read_json_key(j, {"N", "name"}, frame.Layer_name);
+    read_json_key(j, {"N", "name"}, frame.name);
     read_json_key(j, {"T", "tween"}, frame.tween);
     // SOUND
     // BLEND
 }
 
-//* Couple structs skipped
+void from_json(const nlohmann::json& j, AnimationLayerData& layer)
+{
+    read_json_key(j, {"Layer_name"}, layer.Layer_name);
+    read_json_key(j, {"Layer_type"}, layer.Layer_type);
+    read_json_key(j, {"Clipped_by"}, layer.Clipped_by);
+    read_json_key(j, {"Frames"}, layer.Frames);
+}
+
+void from_json(const nlohmann::json& j, AnimationTimelineData& timeline)
+{
+    read_json_key(j, {"L", "LAYERS"}, timeline.LAYERS);
+}
+
+// AnimationSymbolDictionaryEntryData
+// AnimationSymbolDictionaryData
+
+void from_json(const nlohmann::json& j, AnimationStageInstanceData& stageInstanceData)
+{
+    read_json_key(j, {"SYMBOL_Instance"}, stageInstanceData.SYMBOL_Instance);
+}
 
 void from_json(const nlohmann::json& j, AnimationData& animation)
 {
     read_json_key(j, {"N", "name"}, animation.name);
-    //read_json_key(j, {"SI", "StageInstance"}, animation.StageInstance);
+    read_json_key(j, {"SI", "StageInstance"}, animation.StageInstance);
     read_json_key(j, {"SN", "SYMBOL_name"}, animation.SYMBOL_name);
-    //read_json_key(j, {"TL", "TIMELINE"}, animation.TIMELINE);
+    read_json_key(j, {"TL", "TIMELINE"}, animation.TIMELINE);
 }
 
 void from_json(const nlohmann::json& j, AnimationRootData& root)
