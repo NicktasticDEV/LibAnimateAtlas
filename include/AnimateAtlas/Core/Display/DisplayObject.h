@@ -9,6 +9,10 @@ class DisplayObject
 public:
     DisplayObject();
     ~DisplayObject();
+
+    // matrix
+    bool visible;
+    // elementType
 };
 
 } // namespace Display

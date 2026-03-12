@@ -1,5 +1,11 @@
 #pragma once
 
+#include "AnimateAtlas/Core/Display/DisplayObject.h"
+
+#include <string>
+#include <vector>
+#include <memory>
+
 namespace AnimateAtlas {
 namespace Core {
 namespace Timeline {
@@ -10,10 +16,10 @@ public:
     Frame();
     ~Frame();
 
-    // Elements
-    // Index
-    // Duration
-    // Name
+    std::vector<std::unique_ptr<Display::DisplayObject>> displayObjects;
+    int index;
+    int duration;
+    std::string name;
     // Sound
     // Blend
 };

@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Frame.h"
+
+#include <string>
+#include <vector>
+
 namespace AnimateAtlas {
 namespace Core {
 namespace Timeline {
@@ -10,10 +15,10 @@ public:
     Layer();
     ~Layer();
 
-    // Frames
-    // Framecount
-    // Visible
-    // Name
+    std::vector<Frame> frames;
+    int frameCount;
+    bool visible;
+    std::string name;
     // Layertype
     // ParentLayer
 };
