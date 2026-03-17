@@ -11,17 +11,13 @@ int main(int argc, char* argv[]) {
     std::cout << "Animate Atlas Parse Test" << std::endl;
     std::cout << "========================================" << std::endl;
 
-    std::cout << "Parsing file: ";
-
     if (argc >= 2) {
-        std::cout << argv[1] << std::endl;
+        //std::cout << argv[1] << std::endl;
     }
     else {
         std::cout << "No file provided for parsing." << std::endl;
         return 0;
     }
-
-    std::cout << std::endl;
 
     animData.testParse(argv[1]);
 

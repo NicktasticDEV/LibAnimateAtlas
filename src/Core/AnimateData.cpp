@@ -14,61 +14,8 @@ namespace AnimateAtlas {
 namespace Core {
 namespace Data {
 
-void AnimateData::testParse(const char* path) {
-    std::string animPath = std::string(path) + "/Animation.json";
-    std::string metaPath = std::string(path) + "/metadata.json";
-
-    std::ifstream animStream;
-
-    std::cout << "========================================" << std::endl;
-    std::cout << "File Processing" << std::endl;
-    std::cout << "========================================" << std::endl;
-
-    // File
-    std::cout << "- Opening files" << std::endl;
-    animStream.open(animPath);
-
-    if(!animStream) {
-        std::cout << "- Animation file could not open" << std::endl;
-        return;
-    }
-    else {
-        std::cout << "- Animation file opened" << std::endl;
-    }
-
-    // JSON parse
-    std::stringstream animStringStream;
-    animStringStream << animStream.rdbuf();
-
-    json jsonData = json::parse(animStringStream.str());
-    AnimateAtlas::Internal::Parsing::AnimationRootData rootData = jsonData.get<AnimateAtlas::Internal::Parsing::AnimationRootData>();
-    std::cout << "- JSON parsed" << std::endl;
-
-    std::cout << "\n========================================" << std::endl;
-    std::cout << "JSON Read" << std::endl;
-    std::cout << "========================================" << std::endl;
-
-    // JSON read
-    // Root animation data
-    std::cout << "Animation Name: " << rootData.ANIMATION.name << std::endl;
-    std::cout << "Animation SYMBOL Name: " << rootData.ANIMATION.SYMBOL_name << std::endl;
-
-    std::cout << std::endl;
-
-    // Stage instance data
-    std::cout << "Stage Symbol Instance SYMBOL Name: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << std::endl;
-    std::cout << "Stage Symbol Instance first frame: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.firstFrame << std::endl;
-    std::cout << "Stage Symbol Instance symbol type: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.symbolType << std::endl;
-    std::cout << "Stage Symbol Instance loop: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.loop << std::endl;
-    std::cout << "Stage Symbol Instance transformation point: (" << rootData.ANIMATION.StageInstance.SYMBOL_Instance.transformationPoint.x << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.transformationPoint.y << ")" << std::endl;
-    std::cout << "Stage Symbol Instance matrix: (" << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.a << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.b << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.c << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.d << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.tx << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.ty << ")" << std::endl;
-
-    std::cout << std::endl;
-
-    std::cout << "--------------------" << std::endl;
-    std::cout << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << " Root Timeline:" << std::endl;
-    std::cout << "--------------------\n" << std::endl;
-    for (const auto& layer : rootData.ANIMATION.TIMELINE.LAYERS) {
+void printAnimationData(Internal::Parsing::AnimationTimelineData& timeline) {
+    for (const auto& layer : timeline.LAYERS) {
         // Layers
         std::cout << "Layer Name: " << layer.Layer_name << std::endl;
         std::cout << "Layer Type: " << layer.Layer_type.value_or("") << std::endl;
@@ -124,8 +71,65 @@ void AnimateData::testParse(const char* path) {
             std::cout << "|" << std::endl;
         }
     }
+}
 
+void AnimateData::testParse(const char* path) {
+    std::string animPath = std::string(path) + "/Animation.json";
+    std::string metaPath = std::string(path) + "/metadata.json";
 
+    std::ifstream animStream;
+
+    // File
+    std::cout << "- Opening files" << std::flush;
+    animStream.open(animPath);
+    if(!animStream) {
+        std::cout << "\r- Animation file could not open" << std::flush;
+        return;
+    }
+    else {
+        std::cout << "\r- Animation file opened" << std::flush;
+    }
+
+    // JSON parse
+    std::stringstream animStringStream;
+    animStringStream << animStream.rdbuf();
+
+    json jsonData = json::parse(animStringStream.str());
+    AnimateAtlas::Internal::Parsing::AnimationRootData rootData = jsonData.get<AnimateAtlas::Internal::Parsing::AnimationRootData>();
+    std::cout << "\r- Animation file parsed" << std::flush;
+
+    // JSON read
+    // Root animation data
+    std::cout << "\rAnimation Name: " << rootData.ANIMATION.name << std::endl;
+    std::cout << "Animation SYMBOL Name: " << rootData.ANIMATION.SYMBOL_name << std::endl;
+
+    std::cout << std::endl;
+
+    // Stage instance data
+    std::cout << "Stage Symbol Instance SYMBOL Name: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << std::endl;
+    std::cout << "Stage Symbol Instance first frame: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.firstFrame << std::endl;
+    std::cout << "Stage Symbol Instance symbol type: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.symbolType << std::endl;
+    std::cout << "Stage Symbol Instance loop: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.loop << std::endl;
+    std::cout << "Stage Symbol Instance transformation point: (" << rootData.ANIMATION.StageInstance.SYMBOL_Instance.transformationPoint.x << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.transformationPoint.y << ")" << std::endl;
+    std::cout << "Stage Symbol Instance matrix: (" << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.a << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.b << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.c << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.d << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.tx << ", " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.Matrix.ty << ")" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "--------------------" << std::endl;
+    std::cout << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << " Root Timeline:" << std::endl;
+    std::cout << "--------------------\n" << std::endl;
+
+    printAnimationData(rootData.ANIMATION.TIMELINE);
+
+    if(rootData.SYMBOL_DICTIONARY.has_value()) {
+        for (auto& symbol : rootData.SYMBOL_DICTIONARY.value().Symbols) {
+            std::cout << std::endl;
+            std::cout << "--------------------" << std::endl;
+            std::cout << symbol.SYMBOL_name << " Symbol Timeline:" << std::endl;
+            std::cout << "--------------------\n" << std::endl;
+
+            printAnimationData(symbol.TIMELINE);
+        }
+    }
 
     std::cout << std::endl;
 }
