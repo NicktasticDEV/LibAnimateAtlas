@@ -14,9 +14,9 @@ option(ANIMATEATLAS_BUILD_EXAMPLES "Build AnimateAtlas example projects" ON)
 # ====================================================================================
 # Output directories
 set(ANIMATEATLAS_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/out" CACHE PATH "Output directory for built artifacts")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/bin/${CMAKE_BUILD_TYPE}/${CMAKE_SYSTEM_NAME}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib/${CMAKE_BUILD_TYPE}/${CMAKE_SYSTEM_NAME}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ANIMATEATLAS_OUTPUT_DIR}/lib/${CMAKE_BUILD_TYPE}/${CMAKE_SYSTEM_NAME}")
 # ====================================================================================
 
 

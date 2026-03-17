@@ -65,55 +65,63 @@ void AnimateData::testParse(const char* path) {
 
     std::cout << std::endl;
 
-    std::cout << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << " Timeline" << std::endl;
+    std::cout << "--------------------" << std::endl;
+    std::cout << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << " Root Timeline:" << std::endl;
+    std::cout << "--------------------\n" << std::endl;
     for (const auto& layer : rootData.ANIMATION.TIMELINE.LAYERS) {
-        std::cout << "  \n------------------------------------------------" << std::endl;
-        std::cout << "  Layer Name: " << layer.Layer_name << std::endl;
-        std::cout << "  Layer Type: " << layer.Layer_type.value_or("") << std::endl;
-        std::cout << "  Clipped By: " << layer.Clipped_by.value_or("") << std::endl;
+        // Layers
+        std::cout << "Layer Name: " << layer.Layer_name << std::endl;
+        std::cout << "Layer Type: " << layer.Layer_type.value_or("") << std::endl;
+        std::cout << "Clipped By: " << layer.Clipped_by.value_or("") << std::endl;
+        std::cout << "| " << std::endl;
 
-        // Layer
+        // Frames
         for (const auto& frame : layer.Frames) {
-            std::cout << "    \n------------------------------------------------" << std::endl;
-            std::cout << "    Frame Index: " << frame.index << std::endl;
-            std::cout << "    Frame Duration: " << frame.duration << std::endl;
-            std::cout << "    Frame Name: " << frame.name.value_or("") << std::endl;
+            std::cout << "| Frame Index: " << frame.index << std::endl;
+            std::cout << "| Frame Duration: " << frame.duration << std::endl;
+            std::cout << "| Frame Name: " << frame.name.value_or("") << std::endl;
             if (frame.tween.has_value()) {
                 const auto& tween = frame.tween.value();
-                std::cout << "    Tween Type: " << tween.type << std::endl;
-                std::cout << "    Tween Rotate: " << tween.rotate << std::endl;
-                std::cout << "    Tween Rotate Times: " << tween.rotateTimes << std::endl;
-                std::cout << "    Tween Scale: " << std::boolalpha << tween.scale << std::noboolalpha << std::endl;
-                std::cout << "    Tween Snap: " << std::boolalpha << tween.snap << std::noboolalpha << std::endl;
-                std::cout << "    Tween Sync: " << std::boolalpha << tween.sync << std::noboolalpha << std::endl;
-                std::cout << "    Tween Curves: " << std::endl;
+                std::cout << "| Tween Data:" << std::endl;
+                std::cout << "| | Tween Type: " << tween.type << std::endl;
+                std::cout << "| | Tween Rotate: " << tween.rotate << std::endl;
+                std::cout << "| | Tween Rotate Times: " << tween.rotateTimes << std::endl;
+                std::cout << "| | Tween Scale: " << std::boolalpha << tween.scale << std::noboolalpha << std::endl;
+                std::cout << "| | Tween Snap: " << std::boolalpha << tween.snap << std::noboolalpha << std::endl;
+                std::cout << "| | Tween Sync: " << std::boolalpha << tween.sync << std::noboolalpha << std::endl;
+                std::cout << "| | Tween Curves: " << std::endl;
+
+                // Tween Curves
                 for (const auto& curve : tween.curves) {
-                    std::cout << "      Curve Point: (" << curve.x << ", " << curve.y << ")" << std::endl;
+                    std::cout << "| | | (" << curve.x << ", " << curve.y << ")" << std::endl;
                 }
             }
             
             // Frame elements
-            if (frame.elements.empty()) {
-                std::cout << "    No elements in this frame" << std::endl;
-                continue;
+            if (!frame.elements.empty())
+            {
+                std::cout << "| Elements: " << std::endl;
             }
             for (const auto& element : frame.elements) {
-                std::cout << "      ----------------------------------------------" << std::endl;
                 if (element.SYMBOL_Instance.has_value()) {
                     const auto& si = element.SYMBOL_Instance.value();
-                    std::cout << "      Element Symbol Instance SYMBOL Name: " << si.SYMBOL_name << std::endl;
-                    std::cout << "      Element Symbol Instance first frame: " << si.firstFrame << std::endl;
-                    std::cout << "      Element Symbol Instance symbol type: " << si.symbolType << std::endl;
-                    std::cout << "      Element Symbol Instance loop: " << si.loop << std::endl;
-                    std::cout << "      Element Symbol Instance transformation point: (" << si.transformationPoint.x << ", " << si.transformationPoint.y << ")" << std::endl;
-                    std::cout << "      Element Symbol Instance matrix: (" << si.Matrix.a << ", " << si.Matrix.b << ", " << si.Matrix.c << ", " << si.Matrix.d << ", " << si.Matrix.tx << ", " << si.Matrix.ty << ")" << std::endl;
+                    std::cout << "| | Element Symbol Instance SYMBOL Name: " << si.SYMBOL_name << std::endl;
+                    std::cout << "| | Element Symbol Instance first frame: " << si.firstFrame << std::endl;
+                    std::cout << "| | Element Symbol Instance symbol type: " << si.symbolType << std::endl;
+                    std::cout << "| | Element Symbol Instance loop: " << si.loop << std::endl;
+                    std::cout << "| | Element Symbol Instance transformation point: (" << si.transformationPoint.x << ", " << si.transformationPoint.y << ")" << std::endl;
+                    std::cout << "| | Element Symbol Instance matrix: (" << si.Matrix.a << ", " << si.Matrix.b << ", " << si.Matrix.c << ", " << si.Matrix.d << ", " << si.Matrix.tx << ", " << si.Matrix.ty << ")" << std::endl;
+                    std::cout << "| | "<< std::endl;
                 }
                 if (element.ATLAS_SPRITE_instance.has_value()) {
                     const auto& asi = element.ATLAS_SPRITE_instance.value();
-                    std::cout << "      Element Atlas Sprite Instance Name: " << asi.name << std::endl;
-                    std::cout << "      Element Atlas Sprite Instance matrix: (" << asi.Matrix.a << ", " << asi.Matrix.b << ", " << asi.Matrix.c << ", " << asi.Matrix.d << ", " << asi.Matrix.tx << ", " << asi.Matrix.ty << ")" << std::endl;
+                    std::cout << "| | Element Atlas Sprite Instance Name: " << asi.name << std::endl;
+                    std::cout << "| | Element Atlas Sprite Instance matrix: (" << asi.Matrix.a << ", " << asi.Matrix.b << ", " << asi.Matrix.c << ", " << asi.Matrix.d << ", " << asi.Matrix.tx << ", " << asi.Matrix.ty << ")" << std::endl;
+                    std::cout << "| | "<< std::endl;
                 }
             }
+
+            std::cout << "|" << std::endl;
         }
     }
 

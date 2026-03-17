@@ -130,7 +130,10 @@ void from_json(const nlohmann::json& j, AnimationAtlasInstanceData& instance)
     from_json(j, instance.Matrix);
 }
 
-// AnimationTextFieldAttributesData
+void from_json(const nlohmann::json& j, AnimationTextFieldAttributesData& textFieldAttributes)
+{
+    // TODO: Implement
+}
 
 void from_json(const nlohmann::json& j, AnimationTextFieldInstanceData& textFieldInstance)
 {
@@ -156,10 +159,9 @@ void from_json(const nlohmann::json& j, AnimationCurveData& curve)
     read_json_key(j, {"y"}, curve.y);
 }
 
-//TODO: Check keys for mistakes
 void from_json(const nlohmann::json& j, AnimationTweenData& tween)
 {
-    read_json_key(j, {"C", "curve"}, tween.curves); //TODO: Not working right
+    read_json_key(j, {"C", "curve"}, tween.curves);
     read_json_key(j, {"T", "type"}, tween.type);
     read_json_key(j, {"R", "rotate"}, tween.rotate);
     read_json_key(j, {"RT", "rotateTimes"}, tween.rotateTimes);
@@ -183,10 +185,10 @@ void from_json(const nlohmann::json& j, AnimationFrameData& frame)
 
 void from_json(const nlohmann::json& j, AnimationLayerData& layer)
 {
-    read_json_key(j, {"Layer_name"}, layer.Layer_name);
-    read_json_key(j, {"Layer_type"}, layer.Layer_type);
-    read_json_key(j, {"Clipped_by"}, layer.Clipped_by);
-    read_json_key(j, {"Frames"}, layer.Frames);
+    read_json_key(j, {"LN", "Layer_name"}, layer.Layer_name);
+    read_json_key(j, {"LT", "Layer_type"}, layer.Layer_type);
+    read_json_key(j, {"Clpb", "Clipped_by"}, layer.Clipped_by);
+    read_json_key(j, {"FR", "Frames"}, layer.Frames);
 }
 
 void from_json(const nlohmann::json& j, AnimationTimelineData& timeline)
@@ -194,8 +196,16 @@ void from_json(const nlohmann::json& j, AnimationTimelineData& timeline)
     read_json_key(j, {"L", "LAYERS"}, timeline.LAYERS);
 }
 
-// AnimationSymbolDictionaryEntryData
-// AnimationSymbolDictionaryData
+void from_json(const nlohmann::json& j, AnimationSymbolDictionaryEntryData& symbolEntry)
+{
+    read_json_key(j, {"SN", "SYMBOL_name"}, symbolEntry.SYMBOL_name);
+    read_json_key(j, {"TL", "TIMELINE"}, symbolEntry.TIMELINE);
+}
+
+void from_json(const nlohmann::json& j, AnimationSymbolDictionaryData& symbolDict)
+{
+    read_json_key(j, {"S", "Symbols"}, symbolDict.Symbols);
+}
 
 void from_json(const nlohmann::json& j, AnimationStageInstanceData& stageInstanceData)
 {
@@ -212,9 +222,9 @@ void from_json(const nlohmann::json& j, AnimationData& animation)
 
 void from_json(const nlohmann::json& j, AnimationRootData& root)
 {
-    read_json_key(j, {"ANIMATION"}, root.ANIMATION);
-    //read_json_key(j, {"SYMBOL_DICTIONARY"}, root.SYMBOL_DICTIONARY);
-    read_json_key(j, {"metadata"}, root.metadata);
+    read_json_key(j, {"AN", "ANIMATION"}, root.ANIMATION);
+    read_json_key(j, {"SD", "SYMBOL_DICTIONARY"}, root.SYMBOL_DICTIONARY);
+    read_json_key(j, {"MD", "metadata"}, root.metadata);
 }
 
 
