@@ -78,34 +78,57 @@ void AnimateData::testParse(const char* path) {
     std::string metaPath = std::string(path) + "/metadata.json";
 
     std::ifstream animStream;
+    std::ifstream metaSteam;
+
+    // Animate has Inline | BTA has as file
+    bool hasInlineMeta;
 
     // File
     std::cout << "- Opening files" << std::flush;
     animStream.open(animPath);
+    metaSteam.open(metaPath);
+
     if(!animStream) {
         std::cout << "\r- Animation file could not open" << std::flush;
         return;
     }
-    else {
-        std::cout << "\r- Animation file opened" << std::flush;
+    if(!metaSteam) {
+        hasInlineMeta = true;
     }
 
     // JSON parse
     std::stringstream animStringStream;
     animStringStream << animStream.rdbuf();
+    json animJsonData = json::parse(animStringStream.str());
+    AnimateAtlas::Internal::Parsing::AnimationRootData rootData = animJsonData.get<AnimateAtlas::Internal::Parsing::AnimationRootData>();
+    
+    if (!hasInlineMeta) {
+        std::stringstream metaStringStream;
+        metaStringStream << metaSteam.rdbuf();
+        json metaJsonData = json::parse(metaStringStream.str());
+        rootData.metadata = metaJsonData.get<AnimateAtlas::Internal::Parsing::AnimationMetaData>();
+    }
 
-    json jsonData = json::parse(animStringStream.str());
-    AnimateAtlas::Internal::Parsing::AnimationRootData rootData = jsonData.get<AnimateAtlas::Internal::Parsing::AnimationRootData>();
-    std::cout << "\r- Animation file parsed" << std::flush;
+    std::cout << "\r- Files parsed" << std::flush;
 
     // JSON read
     // Root animation data
     std::cout << "\rAnimation Name: " << rootData.ANIMATION.name << std::endl;
     std::cout << "Animation SYMBOL Name: " << rootData.ANIMATION.SYMBOL_name << std::endl;
 
-    std::cout << std::endl;
+    std::cout << "---------" << std::endl;
 
     // Stage instance data
+    std::cout << "Meta file version: " << rootData.metadata.value().version << std::endl;
+    std::cout << "Meta name: " << rootData.metadata.value().name << std::endl;
+    std::cout << "Meta BGColor: " << rootData.metadata.value().backgroundColor << std::endl;
+    std::cout << "Meta width: " << rootData.metadata.value().width << std::endl;
+    std::cout << "Meta height: " << rootData.metadata.value().height << std::endl;
+    std::cout << "Meta ActionScript: " << rootData.metadata.value().asVersion << std::endl;
+    std::cout << "Meta framerate: " << rootData.metadata.value().framerate << std::endl;
+
+    std::cout << "---------" << std::endl;
+
     std::cout << "Stage Symbol Instance SYMBOL Name: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.SYMBOL_name << std::endl;
     std::cout << "Stage Symbol Instance first frame: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.firstFrame << std::endl;
     std::cout << "Stage Symbol Instance symbol type: " << rootData.ANIMATION.StageInstance.SYMBOL_Instance.symbolType << std::endl;
