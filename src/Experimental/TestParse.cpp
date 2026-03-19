@@ -8,11 +8,12 @@
 #include "AnimateAtlas/Core/Models/AnimationData.h"
 
 using nlohmann::json;
+using namespace AnimateAtlas::Core::Models;
 
 namespace AnimateAtlas {
 namespace Experimental {
 
-void printAnimationData(Core::Models::AnimationTimelineData& timeline) {
+void printAnimationData(AnimationTimelineData& timeline) {
     for (const auto& layer : timeline.LAYERS) {
         // Layers
         std::cout << "Layer Name: " << layer.Layer_name << std::endl;
@@ -101,13 +102,13 @@ void testParse(const char* path) {
     std::stringstream animStringStream;
     animStringStream << animStream.rdbuf();
     json animJsonData = json::parse(animStringStream.str());
-    Core::Models::AnimationRootData rootData = animJsonData.get<Core::Models::AnimationRootData>();
+    AnimationRootData rootData = animJsonData.get<AnimationRootData>();
     
     if (!checkMetaInline) {
         std::stringstream metaStringStream;
         metaStringStream << metaStream.rdbuf();
         json metaJsonData = json::parse(metaStringStream.str());
-        rootData.metadata = metaJsonData.get<Core::Models::AnimationMetaData>();
+        rootData.metadata = metaJsonData.get<AnimationMetaData>();
     }
 
     std::cout << "- Files parsed\n\n" << std::flush;

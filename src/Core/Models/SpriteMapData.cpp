@@ -4,7 +4,7 @@
 
 #include "Internal/JsonUtils.h"
 
-using AnimateAtlas::Internal::read_json_key;
+using namespace AnimateAtlas::Internal;
 
 namespace AnimateAtlas {
 namespace Core {

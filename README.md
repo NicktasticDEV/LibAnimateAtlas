@@ -9,6 +9,6 @@ This library is currently not ready for production use and is still under develo
 ## Plans
 
 - Built-in support for OpenGL
-- Support for different versions of Animate Texture atlas
-  - Animate
+- Support for the following versions of Texture Atlas
+  - [Adobe Animate](https://wiki.starling-framework.org/extensions/adobe-animate)
   - [BetterTextureAtlas](https://github.com/Dot-Stuff/BetterTextureAtlas)
