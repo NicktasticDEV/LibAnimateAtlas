@@ -1,11 +1,10 @@
 #include <iostream>
-#include <AnimateAtlas/Core/Data/AnimateData.h>
+#include <AnimateAtlas/Core/Experimental/TestParse.h>
 
 int main(int argc, char* argv[]) {
-    AnimateAtlas::Core::Data::AnimateData animData;
 
     // Clear screen
-    std::cout << "\033[2J\033[1;1H"; // ANSI escape code to clear the console
+    std::cout << "\033[2J\033[1;1H"; 
 
     std::cout << "========================================" << std::endl;
     std::cout << "Animate Atlas Parse Test" << std::endl;
@@ -19,7 +18,8 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    animData.testParse(argv[1]);
+    //animData.testParse(argv[1]);
+    AnimateAtlas::Core::Experimental::testParse(argv[1]);
 
     return 0;
 }

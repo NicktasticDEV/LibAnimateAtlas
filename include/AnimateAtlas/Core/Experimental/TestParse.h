@@ -4,14 +4,9 @@
 
 namespace AnimateAtlas {
 namespace Core {
-namespace Data {
+namespace Experimental {
 
-class AnimateData
-{
-public:
-    void testParse(const char* path);
-
-};
+void testParse(const char* path);
 
 } // namespace Data
 } // namespace Core
