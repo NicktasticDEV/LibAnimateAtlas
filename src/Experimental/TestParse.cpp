@@ -1,20 +1,18 @@
-#include "AnimateAtlas/Core/Experimental/TestParse.h"
-
-#include "Internal/Parsing/AnimationData.h"
-
-#include <nlohmann/json.hpp>
+#include "AnimateAtlas/Experimental/TestParse.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <nlohmann/json.hpp>
+
+#include "AnimateAtlas/Core/Models/AnimationData.h"
 
 using nlohmann::json;
 
 namespace AnimateAtlas {
-namespace Core {
 namespace Experimental {
 
-void printAnimationData(Internal::Parsing::AnimationTimelineData& timeline) {
+void printAnimationData(Core::Models::AnimationTimelineData& timeline) {
     for (const auto& layer : timeline.LAYERS) {
         // Layers
         std::cout << "Layer Name: " << layer.Layer_name << std::endl;
@@ -27,6 +25,7 @@ void printAnimationData(Internal::Parsing::AnimationTimelineData& timeline) {
             std::cout << "| Frame Index: " << frame.index << std::endl;
             std::cout << "| Frame Duration: " << frame.duration << std::endl;
             std::cout << "| Frame Name: " << frame.name.value_or("") << std::endl;
+            // Tween
             if (frame.tween.has_value()) {
                 const auto& tween = frame.tween.value();
                 std::cout << "| Tween Data:" << std::endl;
@@ -50,6 +49,7 @@ void printAnimationData(Internal::Parsing::AnimationTimelineData& timeline) {
                 std::cout << "| Elements: " << std::endl;
             }
             for (const auto& element : frame.elements) {
+                // Symbol Instance
                 if (element.SYMBOL_Instance.has_value()) {
                     const auto& si = element.SYMBOL_Instance.value();
                     std::cout << "| | Element Symbol Instance SYMBOL Name: " << si.SYMBOL_name << std::endl;
@@ -60,6 +60,7 @@ void printAnimationData(Internal::Parsing::AnimationTimelineData& timeline) {
                     std::cout << "| | Element Symbol Instance matrix: (" << si.Matrix.a << ", " << si.Matrix.b << ", " << si.Matrix.c << ", " << si.Matrix.d << ", " << si.Matrix.tx << ", " << si.Matrix.ty << ")" << std::endl;
                     std::cout << "| | "<< std::endl;
                 }
+                // Atlas Sprite Instance
                 if (element.ATLAS_SPRITE_instance.has_value()) {
                     const auto& asi = element.ATLAS_SPRITE_instance.value();
                     std::cout << "| | Element Atlas Sprite Instance Name: " << asi.name << std::endl;
@@ -80,8 +81,8 @@ void testParse(const char* path) {
     std::ifstream animStream;
     std::ifstream metaStream;
 
-    // Animate has Inline | BTA has as file
-    bool hasInlineMeta;
+    // For meta, Animate is Inline | BTA is as file
+    bool checkMetaInline;
 
     // File
     std::cout << "- Opening files\n" << std::flush;
@@ -93,20 +94,20 @@ void testParse(const char* path) {
         return;
     }
     if(!metaStream) {
-        hasInlineMeta = true;
+        checkMetaInline = true;
     }
 
     // JSON parse
     std::stringstream animStringStream;
     animStringStream << animStream.rdbuf();
     json animJsonData = json::parse(animStringStream.str());
-    AnimateAtlas::Internal::Parsing::AnimationRootData rootData = animJsonData.get<AnimateAtlas::Internal::Parsing::AnimationRootData>();
+    Core::Models::AnimationRootData rootData = animJsonData.get<Core::Models::AnimationRootData>();
     
-    if (!hasInlineMeta) {
+    if (!checkMetaInline) {
         std::stringstream metaStringStream;
         metaStringStream << metaStream.rdbuf();
         json metaJsonData = json::parse(metaStringStream.str());
-        rootData.metadata = metaJsonData.get<AnimateAtlas::Internal::Parsing::AnimationMetaData>();
+        rootData.metadata = metaJsonData.get<Core::Models::AnimationMetaData>();
     }
 
     std::cout << "- Files parsed\n\n" << std::flush;
@@ -161,5 +162,4 @@ void testParse(const char* path) {
 }
 
 } // namespace Experimental
-} // namespace Core
 } // namespace AnimateAtlas

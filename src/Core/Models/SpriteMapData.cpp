@@ -1,11 +1,14 @@
-#include "SpriteMapData.h"
+#include "AnimateAtlas/Core/Models/SpriteMapData.h"
 
-#include "../JsonUtils.h"
 #include <nlohmann/json.hpp>
 
+#include "Internal/JsonUtils.h"
+
+using AnimateAtlas::Internal::read_json_key;
+
 namespace AnimateAtlas {
-namespace Internal {
-namespace Parsing {
+namespace Core {
+namespace Models {
 
 // ============================================================
 // From JSON functions

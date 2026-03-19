@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Symbol.h"
 
 namespace AnimateAtlas {

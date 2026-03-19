@@ -1,11 +1,14 @@
-#include "AnimationData.h"
+#include "AnimateAtlas/Core/Models/AnimationData.h"
 
-#include "../JsonUtils.h"
 #include <nlohmann/json.hpp>
 
+#include "Internal/JsonUtils.h"
+
+using AnimateAtlas::Internal::read_json_key;
+
 namespace AnimateAtlas {
-namespace Internal {
-namespace Parsing {
+namespace Core {
+namespace Models {
 
 // ============================================================
 // From JSON functions
@@ -226,7 +229,6 @@ void from_json(const nlohmann::json& j, AnimationRootData& root)
     read_json_key(j, {"SD", "SYMBOL_DICTIONARY"}, root.SYMBOL_DICTIONARY);
     read_json_key(j, {"MD", "metadata"}, root.metadata);
 }
-
 
 } // namespace Parsing
 } // namespace Internal

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Layer.h"
-
 #include <string>
 #include <vector>
+
+#include "Layer.h"
 
 namespace AnimateAtlas {
 namespace Core {

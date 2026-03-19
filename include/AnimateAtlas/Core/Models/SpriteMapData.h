@@ -5,8 +5,8 @@
 #include <nlohmann/json.hpp>
 
 namespace AnimateAtlas {
-namespace Internal {
-namespace Parsing {
+namespace Core {
+namespace Models {
 
 struct SpriteMapResolution { int w, h; };
 
@@ -42,6 +42,6 @@ void to_json(nlohmann::json& j, const SpriteMapAtlas& atlas);
 void to_json(nlohmann::json& j, const SpriteMapMeta& meta);
 void to_json(nlohmann::json& j, const SpriteMapData& data);
 
-} // namespace Parsing
-} // namespace Internal
+} // namespace Models
+} // namespace Core
 } // namespace AnimateAtlas

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <AnimateAtlas/Core/Experimental/TestParse.h>
+#include <AnimateAtlas/Experimental/TestParse.h>
 
 int main(int argc, char* argv[]) {
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     }
 
     //animData.testParse(argv[1]);
-    AnimateAtlas::Core::Experimental::testParse(argv[1]);
+    AnimateAtlas::Experimental::testParse(argv[1]);
 
     return 0;
 }

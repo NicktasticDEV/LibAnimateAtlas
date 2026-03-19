@@ -6,8 +6,8 @@
 #include <nlohmann/json.hpp>
 
 namespace AnimateAtlas {
-namespace Internal {
-namespace Parsing {
+namespace Core {
+namespace Models {
 
 struct AnimationTransformationPointData {
     float x;
@@ -244,6 +244,6 @@ void to_json(nlohmann::json& j, const AnimationStageInstanceData& stageInstance)
 void to_json(nlohmann::json& j, const AnimationData& animation);
 void to_json(nlohmann::json& j, const AnimationRootData& root);
 
-} // namespace Parsing
-} // namespace Internal
+} // namespace Models
+} // namespace Core
 } // namespace AnimateAtlas

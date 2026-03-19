@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AnimateAtlas/Core/Display/DisplayObject.h"
-
 #include <string>
 #include <vector>
 #include <memory>
+
+#include "AnimateAtlas/Core/Display/DisplayObject.h"
 
 namespace AnimateAtlas {
 namespace Core {

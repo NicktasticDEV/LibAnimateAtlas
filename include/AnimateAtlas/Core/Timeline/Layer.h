@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Frame.h"
-
 #include <string>
 #include <vector>
+
+#include "Frame.h"
 
 namespace AnimateAtlas {
 namespace Core {

@@ -1,7 +1,8 @@
 #pragma once
-#include "DisplayObject.h"
 
 #include <string>
+
+#include "DisplayObject.h"
 
 namespace AnimateAtlas {
 namespace Core {
