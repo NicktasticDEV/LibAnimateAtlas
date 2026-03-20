@@ -4,7 +4,7 @@ namespace AnimateAtlas {
 namespace Core {
 namespace Display {
 
-AtlasSprite::AtlasSprite(AnimationAtlasInstanceData& data)
+AtlasSprite::AtlasSprite(AnimationAtlasInstanceData data)
 {
     
 }

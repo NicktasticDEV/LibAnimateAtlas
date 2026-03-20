@@ -13,15 +13,15 @@ namespace Timeline {
 class Frame
 {
 public:
-    Frame();
-    ~Frame();
-
     std::vector<std::unique_ptr<Display::DisplayObject>> displayObjects;
     int index;
     int duration;
     std::string name;
     // Sound
     // Blend
+
+    Frame();
+    ~Frame();
 };
 
 } // namespace Timeline

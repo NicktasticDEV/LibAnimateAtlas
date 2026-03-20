@@ -12,13 +12,13 @@ namespace Timeline {
 class Timeline
 {
 public:
-    Timeline();
-    ~Timeline();
-
     std::vector<Layer> layers;
     std::string name;
     int currentFrame;
     int frameCount;
+
+    Timeline();
+    ~Timeline();
 };
 
 } // namespace Timeline

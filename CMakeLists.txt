@@ -59,10 +59,10 @@ add_library(${PROJECT_NAME} ${AnimateAtlas_SRC})
 target_include_directories(${PROJECT_NAME} 
     PUBLIC 
         $<BUILD_INTERFACE:${AnimateAtlas_INCLUDE}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external/includes> 
         $<INSTALL_INTERFACE:include>
     PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/external/includes"
 )
 # ====================================================================================
 
@@ -137,6 +137,9 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows" OR CMAKE_SYSTEM_NAME STREQUAL "Linux" O
     )
 
     install(DIRECTORY include/ DESTINATION include)
+    # Vendor libraries
+    install(DIRECTORY external/includes/nlohmann DESTINATION include)
+    install(DIRECTORY external/includes/glm DESTINATION include)
     
     install(EXPORT AnimateAtlasTargets
         NAMESPACE AnimateAtlas::

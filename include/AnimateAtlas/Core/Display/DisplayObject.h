@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AnimateAtlas/Core/Math/Matrix2D.h"
+
 namespace AnimateAtlas {
 namespace Core {
 namespace Display {
@@ -7,12 +9,11 @@ namespace Display {
 class DisplayObject
 {
 public:
-    DisplayObject();
-    ~DisplayObject();
+    Math::Matrix2D matrix;
+    bool visible = true;
 
-    // matrix
-    bool visible;
-    // elementType
+    DisplayObject() = default;
+    virtual ~DisplayObject() = default;
 };
 
 } // namespace Display

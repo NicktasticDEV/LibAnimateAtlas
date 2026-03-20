@@ -11,15 +11,15 @@ namespace Display {
 class Symbol : public DisplayObject
 {
 public:
-    Symbol();
-    ~Symbol();
-
     // Timeline
     std::string name;
     int firstFrame;
     //? symbolType
     // Transformation Point
     // Loop type
+
+    Symbol() = default;
+    ~Symbol() override = default;
 };
 
 } // namespace Display
