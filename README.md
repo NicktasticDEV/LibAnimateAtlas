@@ -1,10 +1,11 @@
-# Animate Atlas Library
+<center>
+<img src="assets/LibAnimAtlasLogo.png" width="400">
+</center>
 
-A library made to load Adobe Animate Texture Atlas files for any purpose, whether it's for manipulating or rendering Texture Atlas data!
+A library made for loading Adobe Animate Texture Atlas files for any purpose, whether it's for manipulating or rendering Texture Atlas data!
 
-## Currently Work in Progress
-
-This library is currently not ready for production use and is still under development. Feel free to contribute if you'd like!
+> [!WARNING]
+> This library is currently not ready for production use and is still under development.
 
 ## Plans
 
