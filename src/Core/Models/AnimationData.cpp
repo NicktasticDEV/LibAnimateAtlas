@@ -2,9 +2,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "Internal/JsonUtils.h"
+#include "Core/Internal/JsonUtils.h"
 
-using namespace AnimateAtlas::Internal;
+using namespace AnimateAtlas::Core::Internal;
 
 namespace AnimateAtlas {
 namespace Core {

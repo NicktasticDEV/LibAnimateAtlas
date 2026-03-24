@@ -1,3 +1,5 @@
+#pragma once
+
 #include <initializer_list>
 #include <optional>
 #include <nlohmann/json.hpp>
@@ -5,6 +7,7 @@
 using json = nlohmann::json;
 
 namespace AnimateAtlas {
+namespace Core {
 namespace Internal {
 
 template <typename T>
@@ -28,4 +31,5 @@ void read_json_key(const json& j, std::initializer_list<const char*> keys, std::
 }
 
 } // namespace Internal
+} // namespace Core
 } // namespace AnimateAtlas

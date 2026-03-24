@@ -22,4 +22,4 @@ int main(int argc, char* argv[]) {
     AnimateAtlas::Experimental::testParse(argv[1]);
 
     return 0;
-}
+} 

@@ -83,7 +83,7 @@ void testParse(const char* path) {
     std::ifstream metaStream;
 
     // For meta, Animate is Inline | BTA is as file
-    bool checkMetaInline;
+    bool checkMetaInline = false;
 
     // File
     std::cout << "- Opening files\n" << std::flush;
